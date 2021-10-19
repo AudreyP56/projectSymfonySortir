@@ -24,9 +24,8 @@ class SortieRepository extends ServiceEntityRepository
       * @return Sortie[] Returns an array of Sortie objects
      */
 
-    public function findBySearchValue($values)
+    public function findBySearchValue($values, $userId)
     {
-
         $today = date("F j, Y, g:i a");
 
         $qb = $this->createQueryBuilder('s');
@@ -53,22 +52,22 @@ class SortieRepository extends ServiceEntityRepository
                     $qb->andWhere('s.dateHeureSortie <= :val5')
                         ->setParameter('val5', $today);
                 }
-//            if ($key == 'isOrganisateur') {
-//                $qb->andWhere('s.organisateur = :val6')
-//                    ->setParameter('val6', $value );
-//            }
-//            if ($key == 'isInscrit') {
-//                $qb->andWhere('s.participants = :val7')
-//                    ->setParameter('val7','1');
-//            }
-//            if ($key == 'isNotInscrit') {
-//                $qb->andWhere('s.nom like :val8')
-//                    ->setParameter('val8',$value);
-//            }
+                if ($key == 'isOrganisateur') {
+                    $qb->andWhere('s.organisateur = :val6')
+                        ->setParameter('val6', $userId );
+                }
+                //FRANCHEMNT LA JE COMPREND PAS TROP ???
+                if ($key == 'isInscrit') {
+                    $qb->andWhere(':val7 MEMBER OF s.participants')
+                        ->setParameter('val7',$userId);
+                }
+                if ($key == 'isNotInscrit') {
+                    $qb->andWhere(' :val8 NOT MEMBER OF s.participants')
+                        ->setParameter('val8',$userId);
+                }
 
             }
         }
-//        dd( $qb->getQuery()->getSQL());
         return $qb
             ->getQuery()
             ->getResult()
