@@ -15,27 +15,10 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/sortie", name="sortie")
+     * @Route("/sorties", name="sorties")
      */
 
-    public function index(): Response
-    {
-
-        $sorties = $this->getDoctrine()
-            ->getRepository(Sortie::class)->findAll();
-        $sites = $this->getDoctrine()
-            ->getRepository(Site::class)->findAll();
-
-        return $this->render('sortie/index.html.twig', [
-            'sorties' => $sorties,
-            'sites'=> $sites,
-        ]);
-    }
-
-    /**
-     * @Route("/search", name="_search")
-     */
-    public function searchAndFilter(Request $request): Response
+    public function index(Request $request): Response
     {
         $searchParam =$request->request->all();
 
@@ -48,7 +31,6 @@ class SortieController extends AbstractController
             'sorties' => $sorties,
             'sites'=> $sites,
         ]);
-
     }
 
     /**
