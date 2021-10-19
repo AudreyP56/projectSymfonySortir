@@ -38,16 +38,20 @@ class SortieRepository extends ServiceEntityRepository
                         ->setParameter('val', $value);
                 }
                 if ($key == 'search') {
-                    $qb->andWhere('s.nom like :val')
-                        ->setParameter('val', '%' . $value . '%');
+                    $qb->andWhere('s.nom like :val2')
+                        ->setParameter('val2', '%' . $value . '%');
                 }
                 if ($key == 'dateStart') {
-                    $qb->andWhere('s.dateHeureSortie >= :val')
-                        ->setParameter('val', $value);
+                    $qb->andWhere('s.dateHeureSortie >= :val3')
+                        ->setParameter('val3', $value);
                 }
                 if ($key == 'dateEnd') {
-                    $qb->andWhere('s.dateLimite < :val')
-                        ->setParameter('val', $value);
+                    $qb->andWhere('s.dateLimite < :val4')
+                        ->setParameter('val4', $value);
+                }
+                if ($key == 'isPass') {
+                    $qb->andWhere('s.dateHeureSortie <= :val5')
+                        ->setParameter('val5', $today);
                 }
 //            if ($key == 'isOrganisateur') {
 //                $qb->andWhere('s.organisateur.id like :val')
@@ -61,10 +65,7 @@ class SortieRepository extends ServiceEntityRepository
 //                $qb->andWhere('s.nom like :val')
 //                    ->setParameter('val',$value);
 //            }
-                if ($key == 'isPass') {
-                    $qb->andWhere('s.dateHeureSortie <= :val')
-                        ->setParameter('val', $today);
-                }
+
             }
         }
 //        dd( $qb->getQuery()->getSQL());
