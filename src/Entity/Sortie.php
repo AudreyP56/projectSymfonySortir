@@ -50,17 +50,6 @@ class Sortie
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sorties")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $organisateur;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="inscrit")
-     */
-    private $participants;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Etat::class)
      * @ORM\JoinColumn(nullable=false)
      */
@@ -72,9 +61,21 @@ class Sortie
      */
     private $lieuId;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="participants")
+     */
+    private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organisateur;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,41 +155,6 @@ class Sortie
         return $this;
     }
 
-    public function getOrganisateur(): ?User
-    {
-        return $this->organisateur;
-    }
-
-    public function setOrganisateur(?User $organisateur): self
-    {
-        $this->organisateur = $organisateur;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getParticipants(): Collection
-    {
-        return $this->participants;
-    }
-
-    public function addParticipant(User $participant): self
-    {
-        if (!$this->participants->contains($participant)) {
-            $this->participants[] = $participant;
-        }
-
-        return $this;
-    }
-
-    public function removeParticipant(User $participant): self
-    {
-        $this->participants->removeElement($participant);
-
-        return $this;
-    }
 
     public function getEtat(): ?Etat
     {
@@ -210,6 +176,45 @@ class Sortie
     public function setLieuId(?Lieu $lieuId): self
     {
         $this->lieuId = $lieuId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?User
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?User $organisateur): self
+    {
+        $this->organisateur = $organisateur;
 
         return $this;
     }
