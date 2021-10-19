@@ -1,0 +1,43 @@
+.booking-hours-btn-wrapper {
+    text-align: center;
+}
+
+.booking-hours-btn {
+    padding: 1rem;
+    background: #ffa012;
+    color: white;
+    border: 0;
+    width: 70px;
+}
+
+.booking-hours-btn:hover{
+    background: #ffc164;
+}
+
+.booking-time-btn-list{
+    width: 100%;
+}
+
+.booking-date-search-wrapper{
+    background: #353535;
+    width: 100%;
+    padding: 1rem 0;
+    color: white;
+}
+
+.booking-date-search-container {
+    width: 400px;
+    text-align: center;
+}
+
+.booking-date-search-container button{
+    width: 100%;
+}
+
+.booking-table-check-wrapper {
+    padding: 1rem 0;
+}
+
+.booking-recap label{
+    width: 200px;
+}

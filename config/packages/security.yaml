@@ -7,12 +7,14 @@ security:
         App\Entity\User:
             algorithm: auto
 
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -29,7 +31,6 @@ security:
                 secret: '%env(APP_SECRET)%'
                 lifetime: 604800 # 1 week in seconds
                 path: /
-                remember_me_parameter: _remember_me
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
