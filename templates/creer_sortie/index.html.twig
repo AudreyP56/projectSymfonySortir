@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CreerSortieController!{% endblock %}
+
+{% block body %}
+    <h2>Créer une sortie</h2>
+    <div class="form-control">
+        {{ form_start(creationForm) }}
+
+    <div class="row">
+        <div class="col">
+            <label class="form-label" for="nom">Nom de la sortie</label>
+            <input class="form-control" type="text" id="nom" name="{{ field_name(creationForm.nom) }}">
+        </div>
+
+        <div class="col">
+            <label class="form-label" for="dateSortie">Date et heure de la sortie</label>
+            <input class="form-control" type="datetime-local" id="dateSortie" name="{{ field_name(creationForm.dateHeureSortie) }}">
+        </div>
+    </div>
+        <div class="mb-3">
+            <label class="form-label" for="dateLimite">Date limite d'inscription</label>
+            <input class="form-control" type="date" id="dateLimite" name="{{ field_name(creationForm.dateLimite) }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="nbPlace">Nombre de places</label>
+            <input class="form-control" type="number" id="nbPlace" name="{{ field_name(creationForm.nbPlace) }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="duree">Durée</label>
+            <input class="form-control" type="number" id="duree" name="{{ field_name(creationForm.duree) }}"> minutes
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="description">Nom de la sortie</label>
+            <textarea name="{{ field_name(creationForm.description) }}" id="description" cols="30" rows="10"></textarea>
+        </div>
+        <div  style="padding: 1rem 0;">
+            <button type="submit" name="enregistrer" class="btn btn-primary">Enregistrer</button>
+            <button type="submit" name="publier" class="btn btn-success">Publier la sortie</button>
+            <button class="btn btn-danger">Annuler</button>
+        </div>
+        {{ form_end(creationForm) }}
+    </div>
+{% endblock %}
