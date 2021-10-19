@@ -54,16 +54,16 @@ class SortieRepository extends ServiceEntityRepository
                         ->setParameter('val5', $today);
                 }
 //            if ($key == 'isOrganisateur') {
-//                $qb->andWhere('s.organisateur.id like :val')
-//                    ->setParameter('val', $value );
+//                $qb->andWhere('s.organisateur = :val6')
+//                    ->setParameter('val6', $value );
 //            }
 //            if ($key == 'isInscrit') {
-//                $qb->andWhere('s.participants = :val')
-//                    ->setParameter('val','1');
+//                $qb->andWhere('s.participants = :val7')
+//                    ->setParameter('val7','1');
 //            }
 //            if ($key == 'isNotInscrit') {
-//                $qb->andWhere('s.nom like :val')
-//                    ->setParameter('val',$value);
+//                $qb->andWhere('s.nom like :val8')
+//                    ->setParameter('val8',$value);
 //            }
 
             }
