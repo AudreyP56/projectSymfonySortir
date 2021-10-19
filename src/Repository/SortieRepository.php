@@ -26,6 +26,7 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findBySearchValue($values, $userId)
     {
+
         $today = date("F j, Y, g:i a");
 
         $qb = $this->createQueryBuilder('s');
@@ -68,6 +69,7 @@ class SortieRepository extends ServiceEntityRepository
 
             }
         }
+
         return $qb
             ->getQuery()
             ->getResult()
