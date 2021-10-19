@@ -9,12 +9,107 @@
 </style>
 
 <div class="example-wrapper">
-    liste des sorties :
-    <ul>
+    Filtrer les sorties :
+
+    <form role="search" id="search-form" method="post" action="{{ path('_search') }}">
+        <div class="form-group row">
+            <label class="mr-sm-2" for="inlineFormCustomSelect">Site</label>
+            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="site">
+                <option selected></option>
+                {% for site in sites %}
+                    <option value="{{ site.id }}">{{ site.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group row">
+            <label for="search" class="col-sm-2 col-form-label">Le nom de la sortie contient</label>
+            <div class="col-sm-10">
+                <input type="search" name="search" class="form-control" id="search" placeholder="search">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="dateStart" class="col-sm-2 col-form-label">Entre</label>
+            <div class="col-sm-10">
+                <input type="date" name="dateStart" class="form-control" id="dateStart" placeholder="search">
+            </div>
+            <label for="dateEnd" class="col-sm-2 col-form-label">et</label>
+            <div class="col-sm-10">
+                <input type="date" name="dateEnd" class="form-control" id="search" placeholder="search" name="dateEnd">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck1" name="isOrganisateur">
+                    <label class="form-check-label" for="gridCheck1">
+                        Sorties dont je suis l'organisateur/trice
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck2" name="isInscrit">
+                    <label class="form-check-label" for="gridCheck2">
+                        Sorties auxquelles je suis inscrit/e
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck3" name="isNotInscrit">
+                    <label class="form-check-label" for="gridCheck3">
+                        Sorties auxquelles je ne suis pas inscrit/e
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck4" name="isPass">
+                    <label class="form-check-label" for="gridCheck4">
+                        Sorties passées
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Nom de la sortie</th>
+            <th scope="col">Lieu</th>
+            <th scope="col">Date de la sortie</th>
+            <th scope="col">Clôture</th>
+            <th scope="col">Inscrit/places</th>
+            <th scope="col">Etat</th>
+            <th scope="col">Inscrit</th>
+            <th scope="col">Organisateur</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for sortie in sorties %}
-            <li>{{ sortie.duree }}</li>
-            <li>{{ sortie.getLieuId().nom }}</li>
+        <tr>
+            <th scope="row">{{ sortie.nom }}</th>
+            <td>{{ sortie.getLieuId().nom }}</td>
+            <td>{{ sortie.dateHeureSortie|format_datetime() }}</td>
+            <td>{{ sortie.dateLimite|format_datetime() }}</td>
+            <td>{{ sortie.nbPlace }}</td>
+            <td>{{ sortie.getEtat().label }}</td>
+            <td>bollean if participant</td>
+            <td>{{ sortie.getOrganisateur().nom }}</td>
+            <td>
+
+                <a href="{{ path('afficher') }}"> Afficher </a>
+                <a href="{{ path('desister') }}"> Se désister</a>
+                <a href="{{ path('modifier') }}"> Modifier </a>
+                <a href="{{ path('sinscrire') }}"> S'inscrire</a>
+            </td>
+        </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-dark">créer une sortie</button>
 </div>
 {% endblock %}
