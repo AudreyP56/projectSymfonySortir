@@ -20,10 +20,12 @@ class SortieController extends AbstractController
 
     public function index(Request $request): Response
     {
+        $userId = $this->getUser()->getId();
+
         $searchParam =$request->request->all();
 
         $sorties = $this->getDoctrine()
-            ->getRepository(Sortie::class)->findBySearchValue($searchParam);
+            ->getRepository(Sortie::class)->findBySearchValue($searchParam,$userId);
         $sites = $this->getDoctrine()
             ->getRepository(Site::class)->findAll();
 
