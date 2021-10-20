@@ -38,10 +38,11 @@ class Lieu
     private $longitude;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ville::class)
+     * @ORM\ManyToOne(targetEntity=Ville::class, inversedBy="lieux")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $villeId;
+    private $ville;
+
 
     public function getId(): ?int
     {
@@ -96,14 +97,14 @@ class Lieu
         return $this;
     }
 
-    public function getVilleId(): ?Ville
+    public function getVille(): ?Ville
     {
-        return $this->villeId;
+        return $this->ville;
     }
 
-    public function setVilleId(?Ville $villeId): self
+    public function setVille(?Ville $ville): self
     {
-        $this->villeId = $villeId;
+        $this->ville = $ville;
 
         return $this;
     }
