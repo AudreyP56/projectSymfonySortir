@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Création de profil{% endblock %}
+{% block title %}Modification du profil {{ profil.pseudo }}{% endblock %}
 
 {% block body %}
 <style>
@@ -9,8 +9,75 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}</h1>
     <h2>Mon profil</h2>
-    {{ form(profilForm) }}
+    {{ form_start(profilForm) }}
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.pseudo) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.pseudo) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.prenom) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.prenom) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.nom) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.nom) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.telephone) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.telephone) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.email) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.email) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.password) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.password) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(profilForm.confirmation) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(profilForm.confirmation) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            {{ form_label(profilForm.ville) }}
+        </div>
+        <div class="col-4">
+            {{ form_widget(profilForm.ville) }}
+        </div>
+    </div>
+    <div style="padding: 1rem 0">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-danger">Annuler</button>
+    </div>
 </div>
 {% endblock %}
