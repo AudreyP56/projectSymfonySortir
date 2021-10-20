@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,7 +29,10 @@ class SortieRepository extends ServiceEntityRepository
     {
         $today = new \DateTime("now");
 
-        $qb = $this->createQueryBuilder('s');
+        $qb = $this->createQueryBuilder('s')
+            ->join(Etat::class, 'et', 'WITH', 'et.id = s.etat')
+            ->andWhere('et.label != :statusLabel')
+            ->setParameter('statusLabel', Etat::STATUS_ARCHIVE);
 
         foreach ($values as $key => $value  ) {
             if (!empty($value)) {
@@ -73,6 +77,21 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
 
+    public function archiveOldSortie()
+    {
+        $today = new \DateTime("now");
+        $addOneMonth = $today->modify( 'first day of next month' );
+
+        return $this->createQueryBuilder('s')
+            ->join(Etat::class, 'et', 'WITH', 'et.id = s.etat')
+            ->andWhere('s.dateHeureSortie < :val')
+            ->setParameter('val', $addOneMonth)
+            ->andWhere('et.label != :val2')
+            ->setParameter('val2', 'archive')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Sortie
