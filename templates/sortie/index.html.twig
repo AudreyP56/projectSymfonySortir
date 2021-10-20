@@ -101,9 +101,9 @@
             <td>bollean if participant</td>
             <td>{{ sortie.getOrganisateur().nom }}</td>
             <td>
-                {% if sortie.isParticipant(user) %}
+                {% if sortie.isParticipant(user)  %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
-                {% else %}
+                {% elseif  sortie.dateLimite > date() %}
                     <a href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
                 {% endif %}
                 {% if sortie.getOrganisateur == user %}
@@ -113,6 +113,16 @@
                 {% endif %}
             </td>
         </tr>
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endfor %}
         </tbody>
     </table>

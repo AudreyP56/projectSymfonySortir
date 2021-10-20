@@ -205,7 +205,9 @@ class Sortie
 
     public function addParticipant(User $participant): self
     {
-        if (!$this->participants->contains($participant)) {
+        $now = new \DateTime("now");
+
+        if (!$this->participants->contains($participant) and $this->dateLimite > $now) {
             $this->participants[] = $participant;
         }
 

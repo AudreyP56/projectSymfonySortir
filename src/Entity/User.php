@@ -249,7 +249,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addSorty(Sortie $sorty): self
     {
-        if (!$this->sorties->contains($sorty)) {
+        $now = date("F j, Y, g:i a");
+
+        if (!$this->sorties->contains($sorty) and $this->dateLimite > $now) {
             $this->sorties[] = $sorty;
             $sorty->addParticipant($this);
         }
