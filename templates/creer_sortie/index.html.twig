@@ -44,7 +44,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="ville">Ville</label>
-            <select class="form-select" id="ville" name="{{ field_name(creationForm.ville) }}" aria-label="Default select example">
+            <select class="form-select" id="ville" name="{{ field_name(creationForm.ville) }}" aria-label="Default select example" onchange="chargementLieu()">
                 {% for ville in villes %}
                     <option value="{{ ville.id }}" >{{ ville.nom }}</option >
                 {% endfor %}
