@@ -34,6 +34,28 @@
             <label class="form-label" for="description">Nom de la sortie</label>
             <textarea name="{{ field_name(creationForm.description) }}" id="description" cols="30" rows="10"></textarea>
         </div>
+        <div class="mb-3">
+            <label class="form-label" for="duree">Durée</label>
+            <input class="form-control" type="number" id="duree" name="{{ field_name(creationForm.duree) }}"> minutes
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="siteOrganisateur">Site Organisateur</label>
+            <input class="form-control" type="text" id="siteOrganisateur" name="{{ field_name(creationForm.siteOrganisateur) }}" value="{{ site.nom }}" disabled>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="ville">Ville</label>
+            <select class="form-select" id="ville" name="{{ field_name(creationForm.ville) }}" aria-label="Default select example">
+                {% for ville in villes %}
+                    <option value="{{ ville.id }}" >{{ ville.nom }}</option >
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="lieu">Lieu</label>
+            <select class="form-select" id="lieu" name="{{ field_name(creationForm.lieu) }}" aria-label="Default select example">
+
+            </select>
+        </div>
         <div  style="padding: 1rem 0;">
             <button type="submit" name="enregistrer" class="btn btn-primary">Enregistrer</button>
             <button type="submit" name="publier" class="btn btn-success">Publier la sortie</button>
@@ -41,4 +63,24 @@
         </div>
         {{ form_end(creationForm) }}
     </div>
+
+    <script>
+        var $ville = $('#ville');
+        $ville.change(function(){
+            var $form = $(this).closest('creationForm');
+            var data = {};
+            data[$ville.attr('name')] = $ville.val();
+            $.ajax({
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: data,
+                success: function(html){
+                    $('#lieu').replaceWith(
+                        $(html).find('#lieu')
+                    );
+                }
+            });
+        });
+    </script>
 {% endblock %}
+
