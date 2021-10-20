@@ -104,7 +104,7 @@
                 <a href="{{ path('afficher') }}"> Afficher </a>
                 <a href="{{ path('desister') }}"> Se désister</a>
                 <a href="{{ path('modifier') }}"> Modifier </a>
-                <a href="{{ path('sinscrire') }}"> S'inscrire</a>
+                <a href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
             </td>
         </tr>
         {% endfor %}

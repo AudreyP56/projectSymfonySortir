@@ -52,10 +52,26 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/sinscrire", name="sinscrire")
+     * @Route("/sinscrire/{id}", name="sinscrire")
      */
-    public function subscribe(){
-        dd("s'inscrire");
+    public function subscribe($id){
+        $user = $this->getUser();
+
+        $sortie = $this->getDoctrine()->getRepository(Sortie::class);
+        $sortie = $sortie->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException(
+                'Aucune sortie de trouvée restez chez vous ! '
+            );
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $sortie = $sortie->addParticipant($user);
+        $em->persist($sortie);
+        $em->flush();
+
+        return $this->redirectToRoute('sorties');
     }
 
     /**
