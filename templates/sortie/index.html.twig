@@ -100,8 +100,6 @@
             <td>bollean if participant</td>
             <td>{{ sortie.getOrganisateur().nom }}</td>
             <td>
-
-
                 {% if sortie.isParticipant(user) %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
                 {% else %}
