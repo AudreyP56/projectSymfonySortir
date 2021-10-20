@@ -43,18 +43,29 @@ class SortieController extends AbstractController
     public function show(){
         dd('show');
     }
-
-    /**
-     * @Route("/désinscrire", name="desister")
-     */
-    public function unsubscribe(){
-        dd('se désinscrire');
-    }
-
+    
     /**
      * @Route("/sinscrire/{id}", name="sinscrire")
      */
-    public function subscribe($id){
+    public function subscribe($id)
+    {
+        $this->toGoOrNot($id, "addParticipant");
+
+        return $this->redirectToRoute('sorties');
+    }
+
+    /**
+     * @Route("/désinscrire/{id}", name="desister")
+     */
+    public function unsubscribe($id)
+    {
+        $this->toGoOrNot($id, "removeParticipant");
+
+        return $this->redirectToRoute('sorties');
+    }
+
+    private function toGoOrNot($id, $goOrNot)
+    {
         $user = $this->getUser();
 
         $sortie = $this->getDoctrine()->getRepository(Sortie::class);
@@ -67,11 +78,15 @@ class SortieController extends AbstractController
         }
 
         $em = $this->getDoctrine()->getManager();
-        $sortie = $sortie->addParticipant($user);
+        if($goOrNot == 'removeParticipant'){
+            $sortie = $sortie->removeParticipant($user);
+        }
+        if($goOrNot == 'addParticipant'){
+            $sortie = $sortie->addParticipant($user);
+
+        }
         $em->persist($sortie);
         $em->flush();
-
-        return $this->redirectToRoute('sorties');
     }
 
     /**
