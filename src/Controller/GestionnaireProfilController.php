@@ -26,7 +26,7 @@ class GestionnaireProfilController extends AbstractController
         $repoUser = $entityManager->getRepository(User::class);
 
         #On recupère depuis la base (pour profiter du suivi de Doctrine) l'utilisateur actuel
-        $profil = $repoUser->find($this->getUser());
+        $profil = $repoUser->find($this->getUser()->getId());
 
         #Variable qu'on utilisera pour afficher les listes des sites auquel on veut lié l'utilisateur
         $tabVille = [];
@@ -64,13 +64,16 @@ class GestionnaireProfilController extends AbstractController
         {
             $data = $profilForm->getData();
             $profil->setNom($data['nom']);
-            $profil->setPseudo($data['pseudo']);
+
+            $tabPseudoTemp = ['pseudo' => $data['pseudo']];
 
             #Ici, on vérifie si le pseudo n'a pas déjà été prit
-            if(in_array($profil->getPseudo(),$repoUser->getAllPseudo()))
+            if(in_array($tabPseudoTemp,$repoUser->getAllPseudo()))
             {
                 return new Response("Ce pseudo est déjà pris");
             }
+
+            $profil->setPseudo($data['pseudo']);
 
             $profil->setPrenom($data['prenom']);
             $profil->setTelephone($data['telephone']);
@@ -81,13 +84,13 @@ class GestionnaireProfilController extends AbstractController
             #Sinon il a essayé auquel cas on tente la comparaison
             if($data['password'] != null && $data['confirmation'] != null)
             {
-                $profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
-
                 #On check si les deux sont égaux ou pas.
-                if($profil->getPassword() != password_hash($data['confirmation'], PASSWORD_DEFAULT))
+                if($data['password'] != $data['confirmation'])
                 {
                     return new Response('Le mot de passe et sa confirmation ne sont pas identiques');
                 }
+
+                $profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
             }
 
             $profil->setSiteId($repoSite->find($data['ville']));
@@ -97,7 +100,8 @@ class GestionnaireProfilController extends AbstractController
 
         return $this->render('gestionnaire_profil/index.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
-            'profilForm' => $profilForm->createView()
+            'profilForm' => $profilForm->createView(),
+            'profil' => $profil
         ]);
     }
 
