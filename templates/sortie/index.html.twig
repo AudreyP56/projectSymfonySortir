@@ -115,12 +115,12 @@
             <td >
                 {% if sortie.isParticipant(user)  %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"
-                            {% if sortie.getEtat().label == ('annule') %} class="btn btn-secondary btn-lg disabled mt-1" {% else %}class="btn btn-primary btn-lg" {% endif %}role="button"
+                            {% if sortie.getEtat().label == ('annule') %} class="btn btn-secondary btn-lg disabled mt-1" {% else %}class="btn btn-danger btn-lg" {% endif %}role="button"
 {#                       class="btn btn-secondary btn-lg " role="button"#}
                     > Se désister</a>
                 {% elseif  sortie.dateLimite > date() %}
                     <a href="{{ path('sinscrire',{id:sortie.id}) }}"
-                            {% if sortie.getEtat().label == ('annule') %} class="btn btn-secondary btn-lg disabled mt-1" {% else %}class="btn btn-primary btn-lg" {% endif %}role="button"
+                            {% if sortie.getEtat().label == ('annule') %} class="btn btn-secondary btn-lg disabled mt-1" {% else %}class="btn btn-success btn-lg" {% endif %}role="button"
                             {#                       class="btn btn-secondary btn-lg " role="button"#}
                     > S'inscrire</a>
                 {% endif %}
