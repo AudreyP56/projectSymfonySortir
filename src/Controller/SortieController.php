@@ -86,7 +86,7 @@ class SortieController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         if($goOrNot == 'removeParticipant'){
             $sortie = $sortie->removeParticipant($user);
-            $this->addFlash('success',  "votre désistement de " .$sortie->getNom(). " a bien été prise en compte /br vous finirez seule avec votre chat ... tant pis");
+            $this->addFlash('success',  "votre désistement de " .$sortie->getNom(). " a bien été prise en compte vous finirez seule avec votre chat ... tant pis");
         }
         if($goOrNot == 'addParticipant'){
             $sortie = $sortie->addParticipant($user);

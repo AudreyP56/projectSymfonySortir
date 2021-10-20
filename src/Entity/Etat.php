@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Etat
 {
     const STATUS_ARCHIVE = 'archive';
+    const STATUS_EN_CREATION = 'en création';
+    const STATUS_OUVERTE = 'ouverte';
+    const STATUS_EN_COURS = 'En cour';
+    const STATUS_FERME = 'Ferme';
+    const STATUS_ANNULE = 'Annule';
 
     /**
      * @ORM\Id
