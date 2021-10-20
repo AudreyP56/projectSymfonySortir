@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
+use App\Repository\LieuRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -40,6 +41,13 @@ class CreationSortieType extends AbstractType
             ->add('saveEtPublier', SubmitType::class, ['label' => 'Publier'])
         ;
 
+    }
+    /**
+     * @Route("listeLieu/{id}", name="listeLieu")
+     */
+    public function listeLieu(Ville $ville, LieuRepository $lieuRepository){
+        $lieux = $lieuRepository->findBy(["ville"=> $ville]);
+        return $this->json($lieux);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
