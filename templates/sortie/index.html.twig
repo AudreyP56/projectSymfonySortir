@@ -101,10 +101,17 @@
             <td>{{ sortie.getOrganisateur().nom }}</td>
             <td>
 
-                <a href="{{ path('afficher') }}"> Afficher </a>
-                <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
-                <a href="{{ path('modifier') }}"> Modifier </a>
-                <a href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
+
+                {% if sortie.isParticipant(user) %}
+                    <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
+                {% else %}
+                    <a href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
+                {% endif %}
+                {% if sortie.getOrganisateur == user %}
+                    <a href="{{ path('modifier') }}"> Modifier </a>
+                {% else %}
+                    <a href="{{ path('afficher') }}"> Afficher </a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
