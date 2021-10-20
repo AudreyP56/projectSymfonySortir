@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Site;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -18,10 +19,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class GestionnaireProfilController extends AbstractController
 {
     #[Route('/gestionnaire/profil', name: 'gestionnaire_profil')]
-    public function index(Request $request): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $entityManager = $this->getDoctrine()->getManager();
         #Appel du répo des Users
         $repoUser = $entityManager->getRepository(User::class);
 
@@ -106,12 +106,21 @@ class GestionnaireProfilController extends AbstractController
     }
 
     #[Route('/gestionnaire/profil/{id}', name: 'gestionnaire_profil_affichage')]
-    public function showProfil($id) : Response
+    public function showProfil($id, EntityManagerInterface $entityManager) : Response
     {
-        $profil = new User();
-
-        $repoUser = $this->getDoctrine()->getRepository(User::class);
+        $repoUser = $entityManager->getRepository(User::class);
         $profil = $repoUser->find($id);
+
+        return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
+            'controller_name' => 'GestionnaireProfilController',
+            'profil' => $profil
+        ]);
+    }
+
+    #[Route('/gestionnaire/currentUser', name: 'gestionnaire_profil_affichage_currentUser')]
+    public function showProfilUser(EntityManagerInterface $entityManager)
+    {
+        $profil = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
 
         return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
