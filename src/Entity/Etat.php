@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Etat
 {
+    const STATUS_ARCHIVE = 'archive';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
