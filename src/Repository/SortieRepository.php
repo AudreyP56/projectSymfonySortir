@@ -26,8 +26,7 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findBySearchValue($values, $userId)
     {
-
-        $today = date("F j, Y, g:i a");
+        $today = new \DateTime("now");
 
         $qb = $this->createQueryBuilder('s');
 
@@ -66,10 +65,8 @@ class SortieRepository extends ServiceEntityRepository
                     $qb->andWhere(' :val8 NOT MEMBER OF s.participants')
                         ->setParameter('val8',$userId);
                 }
-
             }
         }
-
         return $qb
             ->getQuery()
             ->getResult()
