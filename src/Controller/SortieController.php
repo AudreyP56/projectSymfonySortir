@@ -21,7 +21,8 @@ class SortieController extends AbstractController
     public function index(Request $request): Response
     {
 
-        $userId = $this->getUser()->getId();
+        $user = $this->getUser();
+        $userId = $user->getId();
 
         $searchParam =$request->request->all();
 
@@ -34,6 +35,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
             'sites'=> $sites,
+            'user' => $user,
         ]);
     }
 
@@ -45,17 +47,48 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/désinscrire", name="desister")
+     * @Route("/sinscrire/{id}", name="sinscrire")
      */
-    public function unsubscribe(){
-        dd('se désinscrire');
+    public function subscribe($id)
+    {
+        $this->toGoOrNot($id, "addParticipant");
+
+        return $this->redirectToRoute('sorties');
     }
 
     /**
-     * @Route("/sinscrire", name="sinscrire")
+     * @Route("/désinscrire/{id}", name="desister")
      */
-    public function subscribe(){
-        dd("s'inscrire");
+    public function unsubscribe($id)
+    {
+        $this->toGoOrNot($id, "removeParticipant");
+
+        return $this->redirectToRoute('sorties');
+    }
+
+    private function toGoOrNot($id, $goOrNot)
+    {
+        $user = $this->getUser();
+
+        $sortie = $this->getDoctrine()->getRepository(Sortie::class);
+        $sortie = $sortie->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException(
+                'Aucune sortie de trouvée restez chez vous ! '
+            );
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        if($goOrNot == 'removeParticipant'){
+            $sortie = $sortie->removeParticipant($user);
+        }
+        if($goOrNot == 'addParticipant'){
+            $sortie = $sortie->addParticipant($user);
+
+        }
+        $em->persist($sortie);
+        $em->flush();
     }
 
     /**
