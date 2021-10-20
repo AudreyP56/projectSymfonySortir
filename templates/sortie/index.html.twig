@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SortieController!{% endblock %}
-
+{% block stylesheets %}
+<link href="{{ asset('library/website/css/home.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
     {% include('navbar.html.twig') %}
 <style>
@@ -91,7 +93,7 @@
         </thead>
         <tbody>
         {% for sortie in sorties %}
-        <tr>
+        <tr >
             <th scope="row">{{ sortie.nom }}</th>
             <td>{{ sortie.getLieuId().nom }}</td>
             <td>{{ sortie.dateHeureSortie|format_datetime() }}</td>
@@ -100,7 +102,7 @@
             <td>{{ sortie.getEtat().label }}</td>
             <td>bollean if participant</td>
             <td>{{ sortie.getOrganisateur().nom }}</td>
-            <td>
+            <td {% if sortie.getEtat().label == ('annule') %} class="disable" {% endif %}>
                 {% if sortie.isParticipant(user)  %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
                 {% elseif  sortie.dateLimite > date() %}
