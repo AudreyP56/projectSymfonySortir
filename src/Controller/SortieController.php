@@ -21,7 +21,8 @@ class SortieController extends AbstractController
     public function index(Request $request): Response
     {
 
-        $userId = $this->getUser()->getId();
+        $user = $this->getUser();
+        $userId = $user->getId();
 
         $searchParam =$request->request->all();
 
@@ -34,6 +35,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
             'sites'=> $sites,
+            'user' => $user,
         ]);
     }
 
@@ -43,7 +45,7 @@ class SortieController extends AbstractController
     public function show(){
         dd('show');
     }
-    
+
     /**
      * @Route("/sinscrire/{id}", name="sinscrire")
      */
