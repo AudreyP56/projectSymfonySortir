@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ml-auto">
+            <a class="nav-item nav-link" href="#">Villes</a>
+            <a class="nav-item nav-link" href="#">Sites</a>
+            <a class="nav-item nav-link" href="/sorties">Accueil</a>
+            <a class="nav-item nav-link" href="/gestionnaire/currentUser">Mon profil</a>
+            <a class="nav-item nav-link" href="/logout">Se déconnecter</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}

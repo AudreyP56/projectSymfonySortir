@@ -3,6 +3,7 @@
 {% block title %}Profil de {{ profil.pseudo }}{% endblock %}
 
 {% block body %}
+    {% include('navbar.html.twig') %}
     <style>
         .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; display: grid;
             grid-template-columns: repeat(2, 0.5fr); grid-gap: 10px; grid-auto-rows: minmax(50px, auto);}
