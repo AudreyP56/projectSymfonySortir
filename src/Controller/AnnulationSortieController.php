@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -37,7 +38,14 @@ class AnnulationSortieController extends AbstractController
             $data = $annulationSortieForm->getData();
             #Il faudra modifier l'état de la sortie (la passé en annuler)
             #Il faudra aussi trouver ou stocker le motif d'annulation
-            $currentSortie->setEtat();
+            $currentSortie->setEtat($entityManager->getRepository(Etat::class)->findBy(['label' => 'Ferme']));
+
+            #$motif contient le motif d'annulation, j'ai décidé de le concaténer à la description
+            $motif = $data['motif'];
+
+            $currentSortie->setDescription($currentSortie->getDescription().' '.$motif);
+
+            $entityManager->flush();
         }
 
 
