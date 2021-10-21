@@ -3,6 +3,7 @@
 {% block title %}Hello CreerSortieController!{% endblock %}
 
 {% block body %}
+    {% include('navbar.html.twig') %}
     <h2>Créer une sortie</h2>
     <div class="form-control">
         {{ form_start(creationForm) }}
@@ -15,12 +16,14 @@
 
         <div class="col">
             <label class="form-label" for="dateSortie">Date et heure de la sortie</label>
-            <input class="form-control" type="datetime-local" id="dateSortie" name="{{ field_name(creationForm.dateHeureSortie) }}">
+            {{ form_widget(creationForm.dateHeureSortie) }}
+{#            <input class="form-control" type="datetime-local" id="dateSortie" name="{{ field_name(creationForm.dateHeureSortie) }}">#}
         </div>
     </div>
         <div class="mb-3">
             <label class="form-label" for="dateLimite">Date limite d'inscription</label>
-            <input class="form-control" type="date" id="dateLimite" name="{{ field_name(creationForm.dateLimite) }}">
+            {{ form_widget(creationForm.dateLimite) }}
+{#            <input class="form-control" type="date" id="dateLimite" name="{{ field_name(creationForm.dateLimite) }}">#}
         </div>
         <div class="mb-3">
             <label class="form-label" for="nbPlace">Nombre de places</label>
@@ -31,20 +34,16 @@
             <input class="form-control" type="number" id="duree" name="{{ field_name(creationForm.duree) }}"> minutes
         </div>
         <div class="mb-3">
-            <label class="form-label" for="description">Nom de la sortie</label>
+            <label class="form-label" for="description">Description</label>
             <textarea class="form-control" name="{{ field_name(creationForm.description) }}" id="description" cols="30" rows="10"></textarea>
         </div>
         <div class="mb-3">
-            <label class="form-label" for="duree">Durée</label>
-            <input class="form-control" type="number" id="duree" name="{{ field_name(creationForm.duree) }}"> minutes
-        </div>
-        <div class="mb-3">
             <label class="form-label" for="siteOrganisateur">Site Organisateur</label>
-            <input class="form-control" type="text" id="siteOrganisateur" name="{{ field_name(creationForm.siteOrganisateur) }}" value="{{ site.nom }}" disabled>
+            <input class="form-control" type="text" id="siteOrganisateur" name="siteOrganisateur" value="{{ site.nom }}" disabled>
         </div>
         <div class="mb-3">
             <label class="form-label" for="ville">Ville</label>
-            <select class="form-select" id="ville" name="{{ field_name(creationForm.ville) }}" aria-label="Default select example" onchange="chargementLieu()">
+            <select class="form-select" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
                 {% for ville in villes %}
                     <option value="{{ ville.id }}" >{{ ville.nom }}</option >
                 {% endfor %}
@@ -74,7 +73,7 @@
         <div  style="padding: 1rem 0;">
             <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
             <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
-            <button class="btn btn-danger" name="{{ field_name(creationForm.annuler) }}">Annuler</button>
+            <a class="btn btn-danger"  href="{{ url('sorties') }}" name="annuler">Annuler</a>
         </div>
         {{ form_end(creationForm) }}
     </div>
