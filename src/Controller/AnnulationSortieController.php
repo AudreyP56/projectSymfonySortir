@@ -48,7 +48,7 @@ class AnnulationSortieController extends AbstractController
             $data = $annulationSortieForm->getData();
             #Il faudra modifier l'état de la sortie (la passé en annuler)
             #Il faudra aussi trouver ou stocker le motif d'annulation
-            $etat = $entityManager->getRepository(Etat::class)->findBy(['label' => 'Ferme']);
+            $etat = $entityManager->getRepository(Etat::class)->findBy(['label' => Etat::STATUS_FERME]);
             $currentSortie->setEtat($etat[0]);
 
             #$motif contient le motif d'annulation, j'ai décidé de le concaténer à la description
