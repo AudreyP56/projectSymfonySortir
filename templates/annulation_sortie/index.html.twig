@@ -12,6 +12,7 @@
 </style>
 
 <div class="example-wrapper">
+    {{ form_start(annulationSortieForm) }}
     <h2><u>Annuler une sortie</u></h2>
     <br/>
     <div class="row">
@@ -54,7 +55,9 @@
             {{ form_widget(annulationSortieForm.motif) }}
         </div>
     </div>
-    <button type="submit" class="btn btn-success">Enregistrer</button>
-    <button type="reset" class="btn btn-danger">Annuler</button>
+    <div style="padding: 1rem 0">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-danger">Annuler</button>
+    </div>
 </div>
 {% endblock %}

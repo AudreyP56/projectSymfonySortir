@@ -116,15 +116,4 @@ class GestionnaireProfilController extends AbstractController
             'profil' => $profil
         ]);
     }
-
-    #[Route('/gestionnaire/currentUser', name: 'gestionnaire_profil_affichage_currentUser')]
-    public function showProfilUser(EntityManagerInterface $entityManager)
-    {
-        $profil = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
-
-        return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
-            'controller_name' => 'GestionnaireProfilController',
-            'profil' => $profil
-        ]);
-    }
 }

@@ -110,6 +110,7 @@
                 {% endif %}
                 {% if sortie.getOrganisateur == user %}
                     <a href="{{ path('modifier') }}"> Modifier </a>
+                    <a href="{{ path('annulation_sortie', {id:sortie.id}) }}">Annuler</a>
                 {% else %}
                     <a href="{{ path('afficher') }}"> Afficher </a>
                 {% endif %}
