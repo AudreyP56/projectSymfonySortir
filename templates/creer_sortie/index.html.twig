@@ -32,7 +32,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="description">Nom de la sortie</label>
-            <textarea name="{{ field_name(creationForm.description) }}" id="description" cols="30" rows="10"></textarea>
+            <textarea class="form-control" name="{{ field_name(creationForm.description) }}" id="description" cols="30" rows="10"></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label" for="duree">Durée</label>
@@ -52,35 +52,50 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="lieu">Lieu</label>
-            <select class="form-select" id="lieu" name="{{ field_name(creationForm.lieu) }}" aria-label="Default select example">
-
+            <select class="form-select" id="lieu" name="{{ field_name(creationForm.lieu) }}" aria-label="Default select example" onchange="chargementRue()" >
             </select>
         </div>
+        <div class="mb-3">
+            <label class="form-label" for="rue">Rue</label>
+            <input class="form-control" type="text" id="rue" name="{{ field_name(creationForm.rue) }}" disabled >
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="codePostal">CodePostal</label>
+            <input class="form-control" type="text" id="codePostal" name="{{ field_name(creationForm.codePostal) }}" disabled >
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="latitude">Latitude</label>
+            <input class="form-control" type="text" id="latitude" name="{{ field_name(creationForm.latitude) }}" >
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="longitude">Longitude</label>
+            <input class="form-control" type="text" id="longitude" name="{{ field_name(creationForm.longitude) }}" >
+        </div>
         <div  style="padding: 1rem 0;">
-            <button type="submit" name="enregistrer" class="btn btn-primary">Enregistrer</button>
-            <button type="submit" name="publier" class="btn btn-success">Publier la sortie</button>
-            <button class="btn btn-danger">Annuler</button>
+            <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
+            <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
+            <button class="btn btn-danger" name="{{ field_name(creationForm.annuler) }}">Annuler</button>
         </div>
         {{ form_end(creationForm) }}
     </div>
-
     <script>
-        var $ville = $('#ville');
-        $ville.change(function(){
-            var $form = $(this).closest('creationForm');
-            var data = {};
-            data[$ville.attr('name')] = $ville.val();
-            $.ajax({
-                url: $form.attr('action'),
-                type: $form.attr('method'),
-                data: data,
-                success: function(html){
-                    $('#lieu').replaceWith(
-                        $(html).find('#lieu')
-                    );
-                }
-            });
-        });
+        function chargementRue(){
+            let nomLieu = document.getElementById("lieu").value;
+            let inputRue = document.getElementById("rue");
+            let inputCodePostal = document.getElementById("codePostal");
+            let inputLatitude = document.getElementById("latitude");
+            let inputLongitude = document.getElementById("longitude");
+            fetch("http://127.0.0.1:8000/listeRue/" + nomLieu)
+                .then(response => response.json())
+                .then((lieuSelect)=> {
+                    for (const lieu of lieuSelect) {
+                        inputRue.value = lieu.rue;
+                        inputCodePostal.value = lieu.ville.codePostal;
+                        inputLatitude.value = lieu.latitude;
+                        inputLongitude.value = lieu.longitude;
+                    }
+                })
+        }
     </script>
 {% endblock %}
 
