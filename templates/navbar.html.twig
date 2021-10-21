@@ -1,16 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ml-auto">
-            <a class="nav-item nav-link" href="#">Villes</a>
-            <a class="nav-item nav-link" href="#">Sites</a>
-            <a class="nav-item nav-link" href="/sorties">Accueil</a>
-            <a class="nav-item nav-link" href="/gestionnaire/currentUser">Mon profil</a>
-            <a class="nav-item nav-link" href="/logout">Se déconnecter</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03" style>
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="">Villes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Sites</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sorties">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/gestionnaire/profil">Mon profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout" tabindex="-1">Se déconnecter</a>
+                </li>
+            </ul>
         </div>
-    </div>
-</nav>
+    </nav>
+
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block title %}Annulation de la sortie{% endblock %}
+
+{% block body %}
+    {% include 'navbar.html.twig' %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    {{ form_start(annulationSortieForm) }}
+    <h2><u>Annuler une sortie</u></h2>
+    <br/>
+    <div class="row">
+        <div class="col-3">
+            <p>Nom de la sortie: </p>
+        </div>
+        <div class="col-3">
+            <p>{{ sortie.nom }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p>Date de la sortie: </p>
+        </div>
+        <div class="col-3">
+            <p>{{ sortie.dateHeureSortie | date('d/m/Y')}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p>Ville organisatrice: </p>
+        </div>
+        <div class="col-3">
+            <p>{{ ville.nom }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p>Lieu: </p>
+        </div>
+        <div class="col-4">
+            <p>{{ lieu.nom }} <br/> {{ lieu.rue }} <br/> {{ ville.codePostal }} {{ ville.nom }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            {{ form_label(annulationSortieForm.motif) }}
+        </div>
+        <div class="col-4">
+            {{ form_widget(annulationSortieForm.motif) }}
+        </div>
+    </div>
+    <div style="padding: 1rem 0">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="reset" class="btn btn-danger">Annuler</button>
+    </div>
+</div>
+{% endblock %}
