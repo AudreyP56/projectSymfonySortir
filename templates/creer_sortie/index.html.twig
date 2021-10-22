@@ -6,7 +6,11 @@
     {% include('navbar.html.twig') %}
 
     <div class="container card">
-        <h2 class="card-header">Créer une sortie</h2>
+        {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
+            <h2 class="card-header">Modifier une sortie</h2>
+        {% else %}
+            <h2 class="card-header">Créer une sortie</h2>
+        {% endif %}
         {{ form_start(creationForm) }}
         <div class="card-body row">
             <div class="col">
@@ -30,10 +34,10 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="duree">Durée</label>
-                    {{ form_widget(creationForm.duree) }}
+                    {{ form_widget(creationForm.duree) }} minutes
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
+                    <label class="form-label " for="description">Description</label>
                     {{ form_widget(creationForm.description) }}
                 </div>
             </div>
