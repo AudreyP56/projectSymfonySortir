@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -41,9 +43,8 @@ class GestionnaireProfilController extends AbstractController
             $tabVille[$value->getNom()] = $value->getId();
         }
 
-
         #Création du formulaire de modification
-        $profilForm = $this->createFormBuilder()
+        $profilForm = $this->createFormBuilder(options:['label' => 'truc', 'attr' => ['enctype' => 'multipart/form-data']])
             ->add('pseudo', TextType::class, ['label' => 'Pseudo : ', 'attr' => ['value' => $profil->getPseudo()]])
             ->add('prenom', TextType::class, ['label' => 'Prénom : ', 'attr' => ['value' => $profil->getPrenom()]])
             ->add('nom', TextType::class, ['label' => 'Nom : ', 'attr' => ['value' => $profil->getNom()]])
@@ -52,10 +53,11 @@ class GestionnaireProfilController extends AbstractController
             ->add('password', PasswordType::class, ['label' => 'Mot de passe : ', 'required' => false ])
             ->add('confirmation', PasswordType::class, ['label' => 'Confirmation : ', 'required' => false ])
             ->add('ville', ChoiceType::class, ['choices' => $tabVille, 'label' => 'Ville de rattachement : ', 'attr' => ['value' => $profil->getSiteId()->getNom()]])
-            ->add('photo', ButtonType::class, ['label' => 'Télécharger vers le serveur'])
+            ->add('photo', FileType::class, ['label' => 'Télécharger vers le serveur'])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('reset', ResetType::class, ['label' => 'Annuler'])
         ->getForm();
+
 
 
         $profilForm->handleRequest($request);
@@ -63,12 +65,42 @@ class GestionnaireProfilController extends AbstractController
         if($profilForm->isSubmitted())
         {
             $data = $profilForm->getData();
+
+//            dd($_FILES);
+
+            $name = $_FILES['form']['name']['photo'];
+
+            $tmpName = $_FILES['form']['tmp_name']['photo'];
+
+           // dd($tmpName);
+
+            if (isset($tmpName)) {
+
+                //$retour = copy($tmpName, $name);
+
+                $retour = true;
+
+                $path = './../uploads/'.$name;
+
+                move_uploaded_file($tmpName, './uploads/'.$name);
+                //move_uploaded_file($tmpName, '.\\templates\\uploads\\'.$name);
+
+
+                if($retour) {
+                    echo '<p>La photo a bien été envoyée.</p>';
+                    echo '<img src="' . $path . '">';
+                }
+
+                $profil->setPhoto($name);
+            }
+
+
             $profil->setNom($data['nom']);
 
             $tabPseudoTemp = ['pseudo' => $data['pseudo']];
 
             #Ici, on vérifie si le pseudo n'a pas déjà été prit
-            if(in_array($tabPseudoTemp,$repoUser->getAllPseudo()))
+            if(in_array($tabPseudoTemp,$repoUser->getAllPseudo()) && $data['pseudo'] != $profil->getPseudo())
             {
                 return new Response("Ce pseudo est déjà pris");
             }
@@ -101,7 +133,8 @@ class GestionnaireProfilController extends AbstractController
         return $this->render('gestionnaire_profil/index.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
             'profilForm' => $profilForm->createView(),
-            'profil' => $profil
+            'profil' => $profil,
+            'imageProfilNom' => './../uploads/'.$profil->getPhoto(),
         ]);
     }
 
@@ -111,9 +144,11 @@ class GestionnaireProfilController extends AbstractController
         $repoUser = $entityManager->getRepository(User::class);
         $profil = $repoUser->find($id);
 
+
         return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
-            'profil' => $profil
+            'profil' => $profil,
+            'imageProfilNom' => $profil->getPhoto(),
         ]);
     }
 }
