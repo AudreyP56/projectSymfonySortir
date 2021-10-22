@@ -181,6 +181,30 @@ class CreerSortieController extends AbstractController
         ]);
     }
 
+    #[Route('/sortie/afficher/{id}', name: 'afficher_sortie')]
+    public function affichage( EntityManagerInterface $entityManager, $id): Response{
+
+        //user courant
+        $user = $this->getUser();
+
+        //repos
+        $repoSite = $this->getDoctrine()->getRepository(Site::class);
+        $repoLieu = $this->getDoctrine()->getRepository(Lieu::class);
+
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        $lieu = $repoLieu->find($sortie->getLieuId());
+        $site = $repoSite->find($user->getSiteId());
+
+
+        return $this->render('creer_sortie/affichage.html.twig', [
+            'controller_name' => 'CreerSortieController',
+            'sortie' => $sortie,
+            'site' => $site,
+            'lieu' => $lieu,
+
+        ]);
+    }
+
     /**
      * @Route("listeLieu/{id}", name="listeLieu")
      */

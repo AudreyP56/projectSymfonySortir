@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CreerSortieController!{% endblock %}
+
+{% block body %}
+    {% include('navbar.html.twig') %}
+
+    <div class="container card">
+
+        <h2 class="card-header">Afficher une sortie</h2>
+        <div class="card-body row">
+            <div class="col">
+                <div class="row mb-3">
+                    <h6 class="form-label">Nom de la sortie : </h6>
+                    <p class="col">{{ sortie.nom }}</p>
+                </div>
+
+                <div class="row mb-3">
+                    <h6 class="form-label">Date et heure de la sortie : </h6>
+                    <p class="col">{{ sortie.dateHeureSortie | date ('d/m/Y H:i:s')}}</p>
+                </div>
+
+                <div class="row mb-3">
+                    <h6 class="form-label">Date limite d'inscription : </h6>
+                    <p class="col">{{ sortie.dateLimite | date ('d/m/Y')}}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Nombre de places : </h6>
+                    <p class="col">{{ sortie.nbPlace }}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Durée : </h6>
+                    <p class="col">{{ sortie.duree }} minutes</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Description : </h6>
+                    <p class="col">{{ sortie.description }}</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-3">
+                    <h6 class="form-label">Site Organisateur : </h6>
+                    <p class="col">{{ site.nom }}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Ville : </h6>
+                    <p class="col">{{  lieu.getVille().nom }}</p>
+
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Lieu : </h6>
+                    <p class="col">{{ lieu.nom }}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Rue : </h6>
+                    <p class="col">{{ lieu.rue }}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">CodePostal : </h6>
+                    <p class="col">{{ lieu.getVille().getCodePostal() }}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Latitude : </h6>
+                    <p class="col">{{ lieu.latitude }}</p>
+                </div>
+                <div class="row mb-3">
+                    <h6 class="form-label">Longitude : </h6>
+                    <p class="col">{{ lieu.longitude }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <h3 class="card-titre">Liste des participants</h3>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Nom</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for participant in sortie.participants %}
+                    <tr>
+                        <th scope="row">{{loop.index }}</th>
+                        <td>{{ participant.pseudo }}</td>
+                        <td>{{ participant.nom }} {{ participant.prenom }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
