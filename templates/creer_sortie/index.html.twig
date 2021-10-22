@@ -4,75 +4,93 @@
 
 {% block body %}
     {% include('navbar.html.twig') %}
-    <h2>Créer une sortie</h2>
-    <div class="form-control">
+
+    <div class="container card">
+        <h2 class="card-header">Créer une sortie</h2>
         {{ form_start(creationForm) }}
+        <div class="card-body row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Nom de la sortie</label>
+                    {{ form_widget(creationForm.nom) }}
+                </div>
 
-    <div class="row">
-        <div class="col">
-            <label class="form-label" for="nom">Nom de la sortie</label>
-            <input class="form-control" type="text" id="nom" name="{{ field_name(creationForm.nom) }}">
-        </div>
+                <div class="mb-3">
+                    <label class="form-label" for="dateSortie">Date et heure de la sortie</label>
+                    {{ form_widget(creationForm.dateHeureSortie) }}
+                </div>
 
-        <div class="col">
-            <label class="form-label" for="dateSortie">Date et heure de la sortie</label>
-            {{ form_widget(creationForm.dateHeureSortie) }}
-{#            <input class="form-control" type="datetime-local" id="dateSortie" name="{{ field_name(creationForm.dateHeureSortie) }}">#}
-        </div>
-    </div>
-        <div class="mb-3">
-            <label class="form-label" for="dateLimite">Date limite d'inscription</label>
-            {{ form_widget(creationForm.dateLimite) }}
-{#            <input class="form-control" type="date" id="dateLimite" name="{{ field_name(creationForm.dateLimite) }}">#}
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="nbPlace">Nombre de places</label>
-            <input class="form-control" type="number" id="nbPlace" name="{{ field_name(creationForm.nbPlace) }}">
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="duree">Durée</label>
-            <input class="form-control" type="number" id="duree" name="{{ field_name(creationForm.duree) }}"> minutes
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="description">Description</label>
-            <textarea class="form-control" name="{{ field_name(creationForm.description) }}" id="description" cols="30" rows="10"></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="siteOrganisateur">Site Organisateur</label>
-            <input class="form-control" type="text" id="siteOrganisateur" name="siteOrganisateur" value="{{ site.nom }}" disabled>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="ville">Ville</label>
-            <select class="form-select" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
-                {% for ville in villes %}
-                    <option value="{{ ville.id }}" >{{ ville.nom }}</option >
-                {% endfor %}
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="lieu">Lieu</label>
-            <select class="form-select" id="lieu" name="{{ field_name(creationForm.lieu) }}" aria-label="Default select example" onchange="chargementRue()" >
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="rue">Rue</label>
-            <input class="form-control" type="text" id="rue" name="{{ field_name(creationForm.rue) }}" disabled >
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="codePostal">CodePostal</label>
-            <input class="form-control" type="text" id="codePostal" name="{{ field_name(creationForm.codePostal) }}" disabled >
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="latitude">Latitude</label>
-            <input class="form-control" type="text" id="latitude" name="{{ field_name(creationForm.latitude) }}" >
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="longitude">Longitude</label>
-            <input class="form-control" type="text" id="longitude" name="{{ field_name(creationForm.longitude) }}" >
+                <div class="mb-3">
+                    <label class="form-label" for="dateLimite">Date limite d'inscription</label>
+                    {{ form_widget(creationForm.dateLimite) }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="nbPlace">Nombre de places</label>
+                    {{ form_widget(creationForm.nbPlace) }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="duree">Durée</label>
+                    {{ form_widget(creationForm.duree) }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    {{ form_widget(creationForm.description) }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label" for="siteOrganisateur">Site Organisateur</label>
+                    <input class="form-control" type="text" id="siteOrganisateur" name="siteOrganisateur" value="{{ site.nom }}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="ville">Ville</label>
+                    <select class="form-select" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
+                        <option value="0" selected>-- Sélectionner une Ville --</option >
+                        {% for ville in villes %}
+                            {% if app.request.attributes.get('_route') == 'modifier_sortie' and ville== lieu.getVille() %}
+                                <option value="{{ ville.id }}"  selected>{{ ville.nom }}</option >
+                            {% else %}
+                                <option value="{{ ville.id }}">{{ ville.nom }}</option >
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="lieu">Lieu</label>
+                    <select class="form-select" id="lieu" name="{{ field_name(creationForm.lieu) }}"  aria-label="Default select example" onchange="chargementRue()" >
+                        {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
+                            {% block javscript %}
+                            <script>
+                                window.chargementLieu("{{ lieu.nom }}");
+                            </script>
+                            {% endblock %}
+                       {% endif %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="rue">Rue</label>
+                    <input class="form-control" type="text" id="rue" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.rue }}" {% endif%} name="{{ field_name(creationForm.rue) }}" disabled >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="codePostal">CodePostal</label>
+                    <input class="form-control" type="text" id="codePostal" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.getVille().getCodePostal() }}" {% endif%} name="{{ field_name(creationForm.codePostal) }}" disabled >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="latitude">Latitude</label>
+                    <input class="form-control" type="text" id="latitude" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.latitude }}" {% endif%} name="{{ field_name(creationForm.latitude) }}" >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="longitude">Longitude</label>
+                    <input class="form-control" type="text" id="longitude" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.longitude }}" {% endif%} name="{{ field_name(creationForm.longitude) }}" >
+                </div>
+            </div>
         </div>
         <div  style="padding: 1rem 0;">
             <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
             <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
+            {% if  app.request.attributes.get('_route') == 'modifier_sortie' %}
+                <button type="submit" name="{{ field_name(creationForm.supprimer) }}" class="btn btn-secondary">Supprimer la sortie</button>
+            {% endif %}
             <a class="btn btn-danger"  href="{{ url('sorties') }}" name="annuler">Annuler</a>
         </div>
         {{ form_end(creationForm) }}
