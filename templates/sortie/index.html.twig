@@ -101,15 +101,15 @@
             <td>{{ sortie.nbPlace }}</td>
             <td>{{ sortie.getEtat().label }}</td>
             <td>bollean if participant</td>
-            <td>{{ sortie.getOrganisateur().nom }}</td>
-            <td {% if sortie.getEtat().label == ('annule') %} class="disable" {% endif %}>
+            <td>{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</td>
+            <td {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
                 {% if sortie.isParticipant(user)  %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
                 {% elseif  sortie.dateLimite > date() %}
                     <a href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
                 {% endif %}
-                {% if sortie.getOrganisateur == user %}
-                    <a href="{{ path('modifier') }}"> Modifier </a>
+                {% if sortie.getOrganisateur == user and sortie.getEtat().label == ('En création') %}
+                    <a href="{{ path('modifier_sortie',{id: sortie.id} ) }}"> Modifier </a>
                     <a href="{{ path('annulation_sortie', {id:sortie.id}) }}">Annuler</a>
                 {% else %}
                     <a href="{{ path('afficher') }}"> Afficher </a>
