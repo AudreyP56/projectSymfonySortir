@@ -23,6 +23,7 @@ class CsvController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form['upload_file']->getData();
+
             if ($file) {
                 $file_name = $file_uploader->upload($file);
                 if (null !== $file_name) // for example
@@ -60,7 +61,7 @@ class CsvController extends AbstractController
                                 $em->flush();
                                 $em->getConnection()->commit();
                             } catch (Exception $e) {
-                                $this->addFlash('error', 'Merde ça a foiré à la ligne'. $ligne .' !');
+                                $this->addFlash('error', 'M.... ça a planté à la ligne'. $ligne .' !');
 
                                 return $this->render('csv/index.html.twig', [
                                     'form' => $form->createView(),
@@ -68,12 +69,10 @@ class CsvController extends AbstractController
                             }
                         }
                     }
-
-                    $this->addFlash('success', 'La totalité du fichier à été ajouté avec succès');
-
+                    $this->addFlash('success', 'Réjouissez vous la vie est belle et la totalitée du fichier à été ajouté avec succès');
                     fclose($handle);
                 } else {
-                    $this->addFlash('error', 'désolé ça a foiré !');
+                    $this->addFlash('error', 'désolé nous renconrtons une erreur avec votre fichier !');
                 }
             }
         }
