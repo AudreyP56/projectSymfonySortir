@@ -20,7 +20,6 @@ class SortieController extends AbstractController
 
     public function index(Request $request): Response
     {
-
         $user = $this->getUser();
         $userId = $user->getId();
 
