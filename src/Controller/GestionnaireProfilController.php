@@ -74,9 +74,14 @@ class GestionnaireProfilController extends AbstractController
 
             if (isset($tmpName)) {
 
-                $fileName = $this->traitementPhotoBeforeUpdate($tmpName, $name, $size);
+                $temp = $this->traitementPhotoBeforeUpdate($tmpName, $name, $size);
 
-                $profil->setPhoto($fileName);
+                if(!$temp['res'])
+                {
+                    return new Response('Il y a eu une erreur lors du traitement de l\'opération');
+                }
+
+                $profil->setPhoto($temp['fileName']);
             }
 
             $profil->setNom($data['nom']);
@@ -108,7 +113,7 @@ class GestionnaireProfilController extends AbstractController
                 $profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
             }
 
-            $profil->setSiteId($repoSite->find($data['ville']));
+            $profil->setSite($repoSite->find($data['ville']));
 
             $entityManager->flush();
         }
@@ -141,6 +146,8 @@ class GestionnaireProfilController extends AbstractController
         $tabExtension = explode('.', $name);
         $extension = strtolower(end($tabExtension));
         $extensions = ['jpg', 'png', 'jpeg', 'gif'];
+        $bool = true;
+        $fileName = $tmpName;
 
         #Element 0 = width; Element 1 = height
         $donnee = getimagesize($tmpName);
@@ -151,10 +158,12 @@ class GestionnaireProfilController extends AbstractController
         #On vérifie les mesures de l'image
         if($width > 400 || $height > 400)
         {
-            return new Response("La photo est trop grande. Ces dimensions ne doivent pas excéder le 400x400");
+            $bool = false;
+            echo "L'image ne respecte pas le format demandée : 400x400 maximum <br>";
         }
 
-        if(in_array($extension, $extensions)){
+        #J'ai rajouté la condition bool afin que le test (et donc le move_uploaded_file ne se fasse pas alors qu'on veut échoué la requête)
+        if(in_array($extension, $extensions) && $bool){
 
             $uniqueName = uniqid('', true);
             $fileName = $uniqueName.".".$extension;
@@ -162,11 +171,12 @@ class GestionnaireProfilController extends AbstractController
             move_uploaded_file($tmpName, './uploads/'.$fileName);
         }
         else{
+            $bool = false;
             echo "Mauvaise extension";
             //return new Reponse("L'extension de la photo n'est pas bonne");
         }
 
-        return $fileName;
+        return ['fileName' => $fileName, 'res' => $bool];
     }
 
 }
