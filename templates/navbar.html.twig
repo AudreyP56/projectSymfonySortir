@@ -1,32 +1,60 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+{#    <nav class="navbar navbar-expand-lg navbar-light bg-light">#}
+{#        <a class="navbar-brand" href="">Sortir</a>#}
+{#        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">#}
+{#            <span class="navbar-toggler-icon"></span>#}
+{#        </button>#}
+
+
+{#        <div class="collapse navbar-collapse" id="navbarTogglerDemo03" style>#}
+{#            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="">Villes</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="">Sites</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="{{ path('sorties') }}">Accueil</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="{{ path('gestionnaire_profil') }}">Mon profil</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="{{ path('app_logout') }}" tabindex="-1">Se déconnecter</a>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </nav>#}
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Villes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Sites</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('sorties') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('gestionnaire_profil') }}">Mon profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}" tabindex="-1">Se déconnecter</a>
+                    </li>
 
-
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03" style>
-            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="">Villes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Sites</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/sorties">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/gestionnaire/profil">Mon profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout" tabindex="-1">Se déconnecter</a>
-                </li>
-            </ul>
+                </ul>
+            </div>
         </div>
     </nav>
-
 {% endblock %}

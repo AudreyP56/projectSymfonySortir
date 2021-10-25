@@ -8,77 +8,81 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
+    {% form_theme profilForm 'bootstrap_5_layout.html.twig' %}
+<div class="card container mt-3 ">
 
-<div class="example-wrapper">
-    <h2>Mon profil</h2>
-    {{ form_start(profilForm) }}
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.pseudo) }}
+    <h2 class="card-header">Mon profil</h2>
+    <div class="car-body">
+        {{ form_start(profilForm) }}
+        <div class="row">
+            <div class="col-3">
+
+                {{ form_label(profilForm.pseudo) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.pseudo) }}
+            </div>
         </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.pseudo) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_label(profilForm.prenom) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.prenom) }}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.prenom) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_label(profilForm.nom) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.nom) }}
+            </div>
         </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.prenom) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_label(profilForm.telephone) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.telephone) }}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.nom) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_label(profilForm.email) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.email) }}
+            </div>
         </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.nom) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_label(profilForm.password) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.password) }}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.telephone) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_label(profilForm.confirmation) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(profilForm.confirmation) }}
+            </div>
         </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.telephone) }}
+        <div class="row">
+            <div class="col-4">
+                {{ form_label(profilForm.ville) }}
+            </div>
+            <div class="col-4">
+                {{ form_widget(profilForm.ville) }}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.email) }}
+        <div style="padding: 1rem 0">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button type="reset" class="btn btn-danger">Annuler</button>
         </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.email) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.password) }}
-        </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.password) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            {{ form_label(profilForm.confirmation) }}
-        </div>
-        <div class="col-3">
-            {{ form_widget(profilForm.confirmation) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4">
-            {{ form_label(profilForm.ville) }}
-        </div>
-        <div class="col-4">
-            {{ form_widget(profilForm.ville) }}
-        </div>
-    </div>
-    <div style="padding: 1rem 0">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        <button type="reset" class="btn btn-danger">Annuler</button>
     </div>
 </div>
 {% endblock %}

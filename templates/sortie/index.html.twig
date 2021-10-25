@@ -11,13 +11,14 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    Filtrer les sorties :
+<div class="card container mt-3">
 
+<div class="card-body">
+    <h5 class="card-titre">Filtrer les sorties :</h5>
     <form role="search" id="search-form" method="post" action="{{ path('sorties') }}">
         <div class="form-group row">
             <label class="mr-sm-2" for="inlineFormCustomSelect">Site</label>
-            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="site">
+            <select class="form-select mr-sm-2" id="inlineFormCustomSelect" name="site">
                 <option selected></option>
                 {% for site in sites %}
                     <option value="{{ site.id }}">{{ site.nom }}</option>
@@ -76,7 +77,8 @@
             </div>
         </div>
     </form>
-
+</div>
+    <div class="card-footer">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -101,7 +103,7 @@
             <td>{{ sortie.nbPlace }}</td>
             <td>{{ sortie.getEtat().label }}</td>
             <td>bollean if participant</td>
-            <td>{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</td>
+            <td><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
             <td {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
                 {% if sortie.isParticipant(user)  %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
@@ -130,5 +132,8 @@
         </tbody>
     </table>
     <a class="btn btn-dark" href="{{ url('creer_sortie') }}">créer une sortie</a>
+    </div>
+
 </div>
+
 {% endblock %}
