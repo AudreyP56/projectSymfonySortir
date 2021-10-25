@@ -6,8 +6,8 @@ use App\Entity\Site;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -41,9 +41,8 @@ class GestionnaireProfilController extends AbstractController
             $tabVille[$value->getNom()] = $value->getId();
         }
 
-
         #Création du formulaire de modification
-        $profilForm = $this->createFormBuilder()
+        $profilForm = $this->createFormBuilder(options:['label' => 'truc', 'attr' => ['enctype' => 'multipart/form-data']])
             ->add('pseudo', TextType::class, ['label' => 'Pseudo : ', 'attr' => ['value' => $profil->getPseudo()]])
             ->add('prenom', TextType::class, ['label' => 'Prénom : ', 'attr' => ['value' => $profil->getPrenom()]])
             ->add('nom', TextType::class, ['label' => 'Nom : ', 'attr' => ['value' => $profil->getNom()]])
@@ -51,11 +50,12 @@ class GestionnaireProfilController extends AbstractController
             ->add('email', TextType::class, ['label' => 'Email : ', 'attr' => ['value' => $profil->getEmail()]])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe : ', 'required' => false ])
             ->add('confirmation', PasswordType::class, ['label' => 'Confirmation : ', 'required' => false ])
-            ->add('ville', ChoiceType::class, ['choices' => $tabVille, 'label' => 'Ville de rattachement : ', 'attr' => ['value' => $profil->getSiteId()->getNom()]])
-            ->add('photo', ButtonType::class, ['label' => 'Télécharger vers le serveur'])
+            ->add('ville', ChoiceType::class, ['choices' => $tabVille, 'label' => 'Ville de rattachement : ', 'attr' => ['value' => $profil->getSite()->getNom()]])
+            ->add('photo', FileType::class, ['label' => 'Télécharger vers le serveur', 'required' => false])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('reset', ResetType::class, ['label' => 'Annuler'])
         ->getForm();
+
 
 
         $profilForm->handleRequest($request);
@@ -63,18 +63,41 @@ class GestionnaireProfilController extends AbstractController
         if($profilForm->isSubmitted())
         {
             $data = $profilForm->getData();
+
+            $name = $_FILES['form']['name']['photo'];
+
+            $tmpName = $_FILES['form']['tmp_name']['photo'];
+
+            $size = $_FILES['form']['size']['photo'];
+
+            if (isset($tmpName) && $tmpName != "") {
+
+                $temp = $this->traitementPhotoBeforeUpdate($tmpName, $name, $size);
+
+                if(!$temp['res'])
+                {
+                    return new Response('Il y a eu une erreur lors du traitement de l\'opération');
+                }
+
+                #Ici, on supprime l'ancienne photo du dossier upload
+                if($profil->getPhoto() != null)
+                {
+                    unlink('./uploads/'.$profil->getPhoto());
+                }
+                $profil->setPhoto($temp['fileName']);
+            }
+
             $profil->setNom($data['nom']);
 
             $tabPseudoTemp = ['pseudo' => $data['pseudo']];
 
             #Ici, on vérifie si le pseudo n'a pas déjà été prit
-            if(in_array($tabPseudoTemp,$repoUser->getAllPseudo()))
+            if(in_array($tabPseudoTemp,$repoUser->getAllPseudo()) && $data['pseudo'] != $profil->getPseudo())
             {
                 return new Response("Ce pseudo est déjà pris");
             }
 
             $profil->setPseudo($data['pseudo']);
-
             $profil->setPrenom($data['prenom']);
             $profil->setTelephone($data['telephone']);
             $profil->setEmail($data['email']);
@@ -93,15 +116,18 @@ class GestionnaireProfilController extends AbstractController
                 $profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
             }
 
-            $profil->setSiteId($repoSite->find($data['ville']));
+            $profil->setSite($repoSite->find($data['ville']));
 
             $entityManager->flush();
+
+            return $this->redirectToRoute('sorties');
         }
 
         return $this->render('gestionnaire_profil/index.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
             'profilForm' => $profilForm->createView(),
-            'profil' => $profil
+            'profil' => $profil,
+            'imageProfilNom' => './../uploads/'.$profil->getPhoto()
         ]);
     }
 
@@ -113,7 +139,49 @@ class GestionnaireProfilController extends AbstractController
 
         return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
-            'profil' => $profil
+            'profil' => $profil,
+            'imageProfilNom' => './../uploads/'.$profil->getPhoto()
         ]);
     }
+
+
+    #On passe en paramètre le nom de la photo
+    public function traitementPhotoBeforeUpdate($tmpName, $name, $size)
+    {
+        $tabExtension = explode('.', $name);
+        $extension = strtolower(end($tabExtension));
+        $extensions = ['jpg', 'png', 'jpeg', 'gif'];
+        $bool = true;
+        $fileName = $tmpName;
+
+        #Element 0 = width; Element 1 = height
+        $donnee = getimagesize($tmpName);
+
+        $width = $donnee[0];
+        $height = $donnee[1];
+
+        #On vérifie les mesures de l'image
+        if($width > 300 || $height > 300)
+        {
+            $bool = false;
+            echo "L'image ne respecte pas le format demandée : 300x300 maximum <br>";
+        }
+
+        #J'ai rajouté la condition bool afin que le test (et donc le move_uploaded_file ne se fasse pas alors qu'on veut échoué la requête)
+        if(in_array($extension, $extensions) && $bool){
+
+            $uniqueName = uniqid('', true);
+            $fileName = $uniqueName.".".$extension;
+
+            move_uploaded_file($tmpName, './uploads/'.$fileName);
+        }
+        else{
+            $bool = false;
+            echo "Mauvaise extension";
+            //return new Reponse("L'extension de la photo n'est pas bonne");
+        }
+
+        return ['fileName' => $fileName, 'res' => $bool];
+    }
+
 }

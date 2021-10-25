@@ -1,3 +1,4 @@
+
 function chargementLieu( lieuparam = null){
     let idVille = document.getElementById("ville").value;
     let select = document.getElementById("lieu");
@@ -20,7 +21,6 @@ function chargementLieu( lieuparam = null){
                     lieu.innerText = chaqueLieu.nom;
                     select.appendChild(lieu);
                 }
-
             }
         })
 }
