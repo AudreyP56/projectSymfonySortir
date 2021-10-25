@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello CreerSortieController!{% endblock %}
-
+{% block stylesheets %}
+    <link href="{{ asset('library/website/css/home.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
     {% include('navbar.html.twig') %}
-    <div class="container card">
+    {% form_theme creationForm 'bootstrap_5_layout.html.twig' %}
+    <div class="container card mt-3">
         {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
             <h2 class="card-header">Modifier une sortie</h2>
         {% else %}
