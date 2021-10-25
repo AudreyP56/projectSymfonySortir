@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Filesystem\Filesystem;
 use App\Entity\Sortie;
 use App\Entity\User;
 use Doctrine\DBAL\Exception;
@@ -13,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\FileUploader;
 use App\Form\FileUploadType;
+
+
 
 class CsvController extends AbstractController
 {
@@ -39,6 +42,7 @@ class CsvController extends AbstractController
 
                     $repoSite = $em->getRepository(Site::class);
 
+                    $filesystem = new Filesystem();
                     $ligne = null;
                     while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 
@@ -62,6 +66,7 @@ class CsvController extends AbstractController
                                 $em->getConnection()->commit();
                             } catch (Exception $e) {
                                 $this->addFlash('error', 'M.... ça a planté à la ligne'. $ligne .' !');
+                                $filesystem->remove($full_path);
 
                                 return $this->render('csv/index.html.twig', [
                                     'form' => $form->createView(),
@@ -71,6 +76,7 @@ class CsvController extends AbstractController
                     }
                     $this->addFlash('success', 'Réjouissez vous la vie est belle et la totalitée du fichier à été ajouté avec succès');
                     fclose($handle);
+                    $filesystem->remove($full_path);
                 } else {
                     $this->addFlash('error', 'désolé nous renconrtons une erreur avec votre fichier !');
                 }
