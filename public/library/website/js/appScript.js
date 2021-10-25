@@ -1,14 +1,26 @@
-function chargementLieu(){
+
+function chargementLieu( lieuparam = null){
     let idVille = document.getElementById("ville").value;
     let select = document.getElementById("lieu");
     fetch("http://127.0.0.1:8000/listeLieu/" + idVille)
         .then(response => response.json())
         .then((lieux)=> {
             select.innerHTML = "";
+            let defaut = document.createElement("option");
+            defaut.innerText = "-- Sélectionner un lieu --";
+            select.appendChild(defaut);
             for (const chaqueLieu of lieux){
-                let lieu = document.createElement("option");
-                lieu.innerText = chaqueLieu.nom;
-                select.appendChild(lieu);
+                if(lieuparam === chaqueLieu.nom){
+                    let lieu = document.createElement("option");
+                    lieu.setAttribute("selected", "");
+                    lieu.innerText = chaqueLieu.nom;
+                    select.appendChild(lieu);
+                }
+                else{
+                    let lieu = document.createElement("option");
+                    lieu.innerText = chaqueLieu.nom;
+                    select.appendChild(lieu);
+                }
             }
         })
 }
