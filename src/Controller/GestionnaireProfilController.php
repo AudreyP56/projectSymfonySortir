@@ -51,7 +51,7 @@ class GestionnaireProfilController extends AbstractController
             ->add('password', PasswordType::class, ['label' => 'Mot de passe : ', 'required' => false ])
             ->add('confirmation', PasswordType::class, ['label' => 'Confirmation : ', 'required' => false ])
             ->add('ville', ChoiceType::class, ['choices' => $tabVille, 'label' => 'Ville de rattachement : ', 'attr' => ['value' => $profil->getSite()->getNom()]])
-            ->add('photo', FileType::class, ['label' => 'Télécharger vers le serveur'])
+            ->add('photo', FileType::class, ['label' => 'Télécharger vers le serveur', 'required' => false])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('reset', ResetType::class, ['label' => 'Annuler'])
         ->getForm();
@@ -70,9 +70,7 @@ class GestionnaireProfilController extends AbstractController
 
             $size = $_FILES['form']['size']['photo'];
 
-           // dd($tmpName);
-
-            if (isset($tmpName)) {
+            if (isset($tmpName) && $tmpName != "") {
 
                 $temp = $this->traitementPhotoBeforeUpdate($tmpName, $name, $size);
 
@@ -81,6 +79,11 @@ class GestionnaireProfilController extends AbstractController
                     return new Response('Il y a eu une erreur lors du traitement de l\'opération');
                 }
 
+                #Ici, on supprime l'ancienne photo du dossier upload
+                if($profil->getPhoto() != null)
+                {
+                    unlink('./uploads/'.$profil->getPhoto());
+                }
                 $profil->setPhoto($temp['fileName']);
             }
 
@@ -116,6 +119,8 @@ class GestionnaireProfilController extends AbstractController
             $profil->setSite($repoSite->find($data['ville']));
 
             $entityManager->flush();
+
+            return $this->redirectToRoute('sorties');
         }
 
         return $this->render('gestionnaire_profil/index.html.twig', [
@@ -135,7 +140,7 @@ class GestionnaireProfilController extends AbstractController
         return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
             'profil' => $profil,
-            'imageProfilNom' => './uploads/'.$profil->getPhoto()
+            'imageProfilNom' => './../uploads/'.$profil->getPhoto()
         ]);
     }
 
@@ -156,10 +161,10 @@ class GestionnaireProfilController extends AbstractController
         $height = $donnee[1];
 
         #On vérifie les mesures de l'image
-        if($width > 400 || $height > 400)
+        if($width > 300 || $height > 300)
         {
             $bool = false;
-            echo "L'image ne respecte pas le format demandée : 400x400 maximum <br>";
+            echo "L'image ne respecte pas le format demandée : 300x300 maximum <br>";
         }
 
         #J'ai rajouté la condition bool afin que le test (et donc le move_uploaded_file ne se fasse pas alors qu'on veut échoué la requête)
