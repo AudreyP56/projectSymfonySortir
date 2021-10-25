@@ -6,10 +6,8 @@ use App\Entity\Site;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -52,7 +50,7 @@ class GestionnaireProfilController extends AbstractController
             ->add('email', TextType::class, ['label' => 'Email : ', 'attr' => ['value' => $profil->getEmail()]])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe : ', 'required' => false ])
             ->add('confirmation', PasswordType::class, ['label' => 'Confirmation : ', 'required' => false ])
-            ->add('ville', ChoiceType::class, ['choices' => $tabVille, 'label' => 'Ville de rattachement : ', 'attr' => ['value' => $profil->getSiteId()->getNom()]])
+            ->add('ville', ChoiceType::class, ['choices' => $tabVille, 'label' => 'Ville de rattachement : ', 'attr' => ['value' => $profil->getSite()->getNom()]])
             ->add('photo', FileType::class, ['label' => 'Télécharger vers le serveur'])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('reset', ResetType::class, ['label' => 'Annuler'])
@@ -66,34 +64,20 @@ class GestionnaireProfilController extends AbstractController
         {
             $data = $profilForm->getData();
 
-//            dd($_FILES);
-
             $name = $_FILES['form']['name']['photo'];
 
             $tmpName = $_FILES['form']['tmp_name']['photo'];
+
+            $size = $_FILES['form']['size']['photo'];
 
            // dd($tmpName);
 
             if (isset($tmpName)) {
 
-                //$retour = copy($tmpName, $name);
+                $fileName = $this->traitementPhotoBeforeUpdate($tmpName, $name, $size);
 
-                $retour = true;
-
-                $path = './../uploads/'.$name;
-
-                move_uploaded_file($tmpName, './uploads/'.$name);
-                //move_uploaded_file($tmpName, '.\\templates\\uploads\\'.$name);
-
-
-                if($retour) {
-                    echo '<p>La photo a bien été envoyée.</p>';
-                    echo '<img src="' . $path . '">';
-                }
-
-                $profil->setPhoto($name);
+                $profil->setPhoto($fileName);
             }
-
 
             $profil->setNom($data['nom']);
 
@@ -106,7 +90,6 @@ class GestionnaireProfilController extends AbstractController
             }
 
             $profil->setPseudo($data['pseudo']);
-
             $profil->setPrenom($data['prenom']);
             $profil->setTelephone($data['telephone']);
             $profil->setEmail($data['email']);
@@ -134,7 +117,7 @@ class GestionnaireProfilController extends AbstractController
             'controller_name' => 'GestionnaireProfilController',
             'profilForm' => $profilForm->createView(),
             'profil' => $profil,
-            'imageProfilNom' => './../uploads/'.$profil->getPhoto(),
+            'imageProfilNom' => './../uploads/'.$profil->getPhoto()
         ]);
     }
 
@@ -144,11 +127,46 @@ class GestionnaireProfilController extends AbstractController
         $repoUser = $entityManager->getRepository(User::class);
         $profil = $repoUser->find($id);
 
-
         return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
             'profil' => $profil,
-            'imageProfilNom' => $profil->getPhoto(),
+            'imageProfilNom' => './uploads/'.$profil->getPhoto()
         ]);
     }
+
+
+    #On passe en paramètre le nom de la photo
+    public function traitementPhotoBeforeUpdate($tmpName, $name, $size)
+    {
+        $tabExtension = explode('.', $name);
+        $extension = strtolower(end($tabExtension));
+        $extensions = ['jpg', 'png', 'jpeg', 'gif'];
+
+        #Element 0 = width; Element 1 = height
+        $donnee = getimagesize($tmpName);
+
+        $width = $donnee[0];
+        $height = $donnee[1];
+
+        #On vérifie les mesures de l'image
+        if($width > 400 || $height > 400)
+        {
+            return new Response("La photo est trop grande. Ces dimensions ne doivent pas excéder le 400x400");
+        }
+
+        if(in_array($extension, $extensions)){
+
+            $uniqueName = uniqid('', true);
+            $fileName = $uniqueName.".".$extension;
+
+            move_uploaded_file($tmpName, './uploads/'.$fileName);
+        }
+        else{
+            echo "Mauvaise extension";
+            //return new Reponse("L'extension de la photo n'est pas bonne");
+        }
+
+        return $fileName;
+    }
+
 }
