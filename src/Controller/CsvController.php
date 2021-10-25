@@ -53,13 +53,14 @@ class CsvController extends AbstractController
                                 $ligne += 1;
                                 $user = new User();
                                 $user
-                                    ->setSiteId($site)
+                                    ->setSite($site)
                                     ->setnom($data[1])
                                     ->setprenom($data[2])
                                     ->setPseudo($data[3])
                                     ->setTelephone($data[4])
                                     ->setEmail($data[5])
-                                    ->setPassword($data[6]);
+                                    ->setPassword($data[6])
+                                    ->setRoles([$data[7]]);
 
                                 $em->persist($user);
                                 $em->flush();

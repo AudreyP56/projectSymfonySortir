@@ -12,8 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
-
-
     /**
      * @Route("/sorties", name="sorties")
      */
