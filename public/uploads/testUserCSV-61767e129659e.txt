@@ -1,0 +1,3 @@
+﻿site_id_id;nom;prenom;pseudo;telephone;email;password;photo;roles
+1;toto;lebon;toto;202020202;djk@df.fr;jkdjkdfjdfsk;;
+1;tata;lemauvais;taat;202020202;jhfdhjfd@dfd;fgjhfghfghj;;
