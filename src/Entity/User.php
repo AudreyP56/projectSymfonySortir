@@ -69,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Site::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $siteId;
+    private $site;
 
     /**
      * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
@@ -243,14 +243,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSiteId(): ?Site
+    public function getSite(): ?Site
     {
-        return $this->siteId;
+        return $this->site;
     }
 
-    public function setSiteId(?Site $siteId): self
+    public function setSite(?Site $site): self
     {
-        $this->siteId = $siteId;
+        $this->site = $site;
 
         return $this;
     }
