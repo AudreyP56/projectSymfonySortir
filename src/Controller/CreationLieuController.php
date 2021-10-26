@@ -2,7 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
+use App\Entity\Ville;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -11,8 +18,37 @@ class CreationLieuController extends AbstractController
     #[Route('/creation/lieu', name: 'creation_lieu')]
     public function index(): Response
     {
+        $lieuForm = $this->createFormBuilder()
+            ->add('nomLieu', TextType::class)
+            ->add('rueLieu', TextType::class)
+            ->getForm();
+
         return $this->render('creation_lieu/creationLieu.html.twig', [
             'controller_name' => 'CreationLieuController',
+            'formLieu' => $lieuForm->createView()
         ]);
     }
+
+
+    #[Route('sauvegarder/lieu', name: 'sauvegarde_lieu')]
+    public function recupDonnee(Request $request, EntityManagerInterface $entityManager)
+    {
+        $lieu = new Lieu();
+
+        $data = json_decode($request->getContent(), true);
+
+        $lieu->setNom($data['nom']);
+
+        $lieu->setRue($data['rue']);
+
+        $ville = $entityManager->getRepository(Ville::class)->find(1);
+
+        $lieu->setVille($ville);
+
+        $entityManager->persist($lieu);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('sorties');
+    }
+
 }
