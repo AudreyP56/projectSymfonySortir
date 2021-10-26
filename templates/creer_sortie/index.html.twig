@@ -1,17 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello CreerSortieController!{% endblock %}
-
+{% block stylesheets %}
+    <link href="{{ asset('library/website/css/home.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
     {% include('navbar.html.twig') %}
-    <div class="container card">
+    {% form_theme creationForm 'bootstrap_4_layout.html.twig' %}
+    <div class="container card mt-3">
         {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
             <h2 class="card-header">Modifier une sortie</h2>
         {% else %}
             <h2 class="card-header">Créer une sortie</h2>
         {% endif %}
         {{ form_start(creationForm) }}
-        <div class="card-body row">
+        <div class="card-body row-test">
             <div class="col">
                 <div class="mb-3">
                     <label class="form-label" for="nom">Nom de la sortie</label>
@@ -47,7 +50,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="ville">Ville</label>
-                    <select class="form-select" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
+                    <select class="form-control" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
                         <option value="0" selected>-- Sélectionner une Ville --</option >
                         {% for ville in villes %}
                             {% if app.request.attributes.get('_route') == 'modifier_sortie' and ville== lieu.getVille() %}
@@ -60,7 +63,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="lieu">Lieu</label>
-                    <select class="form-select" id="lieu" name="{{ field_name(creationForm.lieu) }}"  aria-label="Default select example" onchange="chargementRue()" >
+                    <select class="form-control" id="lieu" name="{{ field_name(creationForm.lieu) }}"  aria-label="Default select example" onchange="chargementRue()" >
                         {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
                             {% block javscript %}
                             <script>

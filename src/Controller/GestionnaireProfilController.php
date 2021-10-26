@@ -143,7 +143,7 @@ class GestionnaireProfilController extends AbstractController
         return $this->render('gestionnaire_profil/affichageProfil.html.twig', [
             'controller_name' => 'GestionnaireProfilController',
             'profil' => $profil,
-            'imageProfilNom' => './../uploads/'.$profil->getPhoto()
+            'imageProfilNom' => './../../uploads/'.$profil->getPhoto()
         ]);
     }
 
