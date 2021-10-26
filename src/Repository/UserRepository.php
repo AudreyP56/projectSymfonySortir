@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\ResetLink;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -53,6 +54,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             ->select('u.pseudo')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByResetLink($link)
+    {
+        return $this->createQueryBuilder('u')
+            ->join(ResetLink::class, 'l')
+            ->andWhere('l.linkExtension = :link')
+            ->setParameter('link', $link)
             ->getQuery()
             ->getResult();
     }

@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\ResetLink;
 use App\Entity\Site;
 use App\Entity\User;
 use App\Form\PasswordChangeType;
-use App\Form\ResetPasswordTypeType;
+use App\Form\ResetPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -186,16 +187,17 @@ class GestionnaireProfilController extends AbstractController
         return ['fileName' => $fileName, 'res' => $bool];
     }
 
-    #[Route('/gestionnaire/password', name: 'gestionnaire_password')]
-    public function resetPassword(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/gestionnaire/demand_new_password', name: 'gestionnaire_password')]
+    public function askForResetPassword(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ResetPasswordTypeType::class);
+        $form = $this->createForm(ResetPasswordType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form['email']->getData();
 
             $repo = $entityManager->getRepository(User::class);
+
             $user = $repo->findOneBy(['email' =>$email]);
 
             if ($user == null){
@@ -207,7 +209,16 @@ class GestionnaireProfilController extends AbstractController
             }
 
             $userId = $user->getId();
-            return $this->redirectToRoute('gestionnaire_reset_password', ["user"=>$userId]);
+            $link = new ResetLink();
+            $newLink = $link->setLinkExtension($this->generateRandomString());
+            $user->setResetLink($newLink);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $param = $user->getResetLink()->getLinkExtension();
+
+            return $this->redirectToRoute('gestionnaire_reset_password', ["link"=>$param]);
         }
 
         return $this->render('reset_password/index.html.twig', [
@@ -215,13 +226,20 @@ class GestionnaireProfilController extends AbstractController
         ]);
     }
 
-   
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 
-    #[Route('/gestionnaire/reset_password/{user}', name: 'gestionnaire_reset_password')]
+    #[Route('/gestionnaire/reset_password/{link}', name: 'gestionnaire_reset_password')]
 
-    public function otherAction(Request $request,User $user, EntityManagerInterface $entityManager)
+    public function resetPassword(Request $request,$link, EntityManagerInterface $entityManager)
     {
-
         $form = $this->createForm(PasswordChangeType::class);
         $form->handleRequest($request);
 
@@ -229,7 +247,12 @@ class GestionnaireProfilController extends AbstractController
             $newPassword = $form['password']->getData();
             $newPasswordConfirmation = $form['passwordConfirm']->getData();
 
-            $repo = $entityManager->getRepository(User::class);
+
+            $emReset = $entityManager->getRepository(ResetLink::class);
+            $link = $emReset->findBy(['linkExtension'=>$link]);
+            $user = $link[0]->getUser();
+
+            $em = $entityManager->getRepository(User::class);
 
                  if( $newPassword != null && $newPasswordConfirmation != null)
                  {
@@ -249,6 +272,10 @@ class GestionnaireProfilController extends AbstractController
                      $entityManager->flush();
                      $this->addFlash('success', "Victoire vous avez un nouveau mot de pass, pensez à l'enregistrer cette fois, rdv sur la page de login");
 
+                     //ON supprime la ligne dans la base pour ne plus avoir accès au lien
+                     $entityManager->getRepository(ResetLink::class);
+                     $entityManager->remove($link[0]);
+                     $entityManager->flush();
                  }
 
         }
@@ -256,6 +283,4 @@ class GestionnaireProfilController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }
-
 }
-//$profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
