@@ -8,63 +8,63 @@
     <div class="container card mt-3">
 
         <h2 class="card-header">Afficher une sortie</h2>
-        <div class="card-body row">
+        <div class="card-body row-test">
             <div class="col">
                 <div class="row mb-3">
-                    <h6 class="form-label">Nom de la sortie : </h6>
+                    <h5 class="form-label">Nom de la sortie : </h5>
                     <p class="col">{{ sortie.nom }}</p>
                 </div>
 
                 <div class="row mb-3">
-                    <h6 class="form-label">Date et heure de la sortie : </h6>
+                    <h5 class="form-label">Date et heure de la sortie : </h5>
                     <p class="col">{{ sortie.dateHeureSortie | date ('d/m/Y H:i:s')}}</p>
                 </div>
 
                 <div class="row mb-3">
-                    <h6 class="form-label">Date limite d'inscription : </h6>
+                    <h5 class="form-label">Date limite d'inscription : </h5>
                     <p class="col">{{ sortie.dateLimite | date ('d/m/Y')}}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Nombre de places : </h6>
+                    <h5 class="form-label">Nombre de places : </h5>
                     <p class="col">{{ sortie.nbPlace }}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Durée : </h6>
+                    <h5 class="form-label">Durée : </h5>
                     <p class="col">{{ sortie.duree }} minutes</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Description : </h6>
+                    <h5 class="form-label">Description : </h5>
                     <p class="col">{{ sortie.description }}</p>
                 </div>
             </div>
             <div class="col">
                 <div class="row mb-3">
-                    <h6 class="form-label">Site Organisateur : </h6>
+                    <h5 class="form-label">Site Organisateur : </h5>
                     <p class="col">{{ site.nom }}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Ville : </h6>
+                    <h5 class="form-label">Ville : </h5>
                     <p class="col">{{  lieu.getVille().nom }}</p>
 
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Lieu : </h6>
+                    <h5 class="form-label">Lieu : </h5>
                     <p class="col">{{ lieu.nom }}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Rue : </h6>
+                    <h5 class="form-label">Rue : </h5>
                     <p class="col">{{ lieu.rue }}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">CodePostal : </h6>
+                    <h5 class="form-label">CodePostal : </h5>
                     <p class="col">{{ lieu.getVille().getCodePostal() }}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Latitude : </h6>
+                    <h5 class="form-label">Latitude : </h5>
                     <p class="col">{{ lieu.latitude }}</p>
                 </div>
                 <div class="row mb-3">
-                    <h6 class="form-label">Longitude : </h6>
+                    <h5 class="form-label">Longitude : </h5>
                     <p class="col">{{ lieu.longitude }}</p>
                 </div>
             </div>

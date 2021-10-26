@@ -4,12 +4,9 @@
 {% block stylesheets %}
 <link href="{{ asset('library/website/css/home.css') }}" rel="stylesheet">
 {% endblock %}
+
 {% block body %}
     {% include('navbar.html.twig') %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="card container mt-3">
 
@@ -18,7 +15,7 @@
     <form role="search" id="search-form" method="post" action="{{ path('sorties') }}">
         <div class="form-group row">
             <label class="mr-sm-2" for="inlineFormCustomSelect">Site</label>
-            <select class="form-select mr-sm-2" id="inlineFormCustomSelect" name="site">
+            <select class="form-control mr-sm-2" id="inlineFormCustomSelect" name="site">
                 <option selected></option>
                 {% for site in sites %}
                     <option value="{{ site.id }}">{{ site.nom }}</option>
@@ -85,12 +82,12 @@
             <th scope="col">Nom de la sortie</th>
             <th scope="col">Lieu</th>
             <th scope="col">Date de la sortie</th>
-            <th scope="col">Clôture</th>
-            <th scope="col">Inscrit/places</th>
-            <th scope="col">Etat</th>
-            <th scope="col">Inscrit</th>
-            <th scope="col">Organisateur</th>
-            <th scope="col">Actions</th>
+            <th class="table-sortie" scope="col">Clôture</th>
+            <th class="table-sortie" scope="col">Inscrit/places</th>
+            <th class="table-sortie" scope="col">Etat</th>
+            <th class="table-sortie" scope="col">Inscrit</th>
+            <th class="table-sortie" scope="col">Organisateur</th>
+            <th class="table-sortie" scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -99,12 +96,12 @@
             <th scope="row">{{ sortie.nom }}</th>
             <td>{{ sortie.getLieuId().nom }}</td>
             <td>{{ sortie.dateHeureSortie|format_datetime() }}</td>
-            <td>{{ sortie.dateLimite|format_datetime() }}</td>
-            <td>{{ sortie.nbPlace }}</td>
-            <td>{{ sortie.getEtat().label }}</td>
-            <td>bollean if participant</td>
-            <td><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
-            <td {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
+            <td class="table-sortie">{{ sortie.dateLimite|format_datetime() }}</td>
+            <td class="table-sortie">{{ sortie.nbPlace }}</td>
+            <td class="table-sortie">{{ sortie.getEtat().label }}</td>
+            <td class="table-sortie">bollean if participant</td>
+            <td class="table-sortie"><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
+            <td class="table-sortie" {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
                 {% if sortie.isParticipant(user)  %}
                     <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
                 {% elseif  sortie.dateLimite > date() %}
@@ -131,7 +128,7 @@
         {% endfor %}
         </tbody>
     </table>
-    <a class="btn btn-dark" href="{{ url('creer_sortie') }}">créer une sortie</a>
+        <a class="btn btn-dark" id="creerSortie" href="{{ url('creer_sortie') }}">créer une sortie</a>
     </div>
 
 </div>

@@ -2,7 +2,34 @@ body {
     background: #222D32;
     font-family: 'Roboto', sans-serif;
 }
-
+@media screen and (min-width: 600px) and (min-height: 900px){
+    #search-form{
+        display: none;
+    }
+    .table-sortie{
+        display: none;
+    }
+    #creerSortie{
+        display: none;
+    }
+    .row-test {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 16px;
+    }
+}
+.row-test{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 16px;
+}
+@media (max-width: 768px){
+    .row-test {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 16px;
+    }
+}
 .disable{
     display:none;
 }

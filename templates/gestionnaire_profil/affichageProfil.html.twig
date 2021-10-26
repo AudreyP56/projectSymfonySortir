@@ -6,28 +6,34 @@
     {% include('navbar.html.twig') %}
 
 
-    <div class="card container mt-3">
+    <div class="card container mt-3" style="width: 30%">
         <h2 class="card-header">{{ profil.pseudo }}</h2>
+        {% if(imageProfilNom != null) %}
+            <img class="card-img-top" src="{{ imageProfilNom }}">
+        {% endif %}
         <div class="card-body">
+
+
+
             <div class="row mb-3">
-                <h6 class="form-label">Prénom : </h6>
+                <h5 class="form-label">Prénom : </h5>
                 <p class="col">{{ profil.prenom }}</p>
             </div>
             <div class="row mb-3">
-                <h6 class="form-label">Nom : </h6>
+                <h5 class="form-label">Nom : </h5>
                 <p class="col">{{ profil.nom }}</p>
             </div>
             <div class="row mb-3">
-                <h6 class="form-label">Téléphone : </h6>
+                <h5 class="form-label">Téléphone : </h5>
                 <p class="col">{{ profil.telephone }}</p>
             </div>
             <div class="row mb-3">
-                <h6 class="form-label">Email : </h6>
+                <h5 class="form-label">Email : </h5>
                 <p class="col">{{ profil.email }}</p>
             </div>
             <div class="row mb-3">
-                <h6 class="form-label">Site de rattachement : </h6>
-                <p class="col"></p>
+                <h5 class="form-label">Site de rattachement : </h5>
+                <p class="col">{{ profil.site.nom }}</p>
             </div>
 
         </div>

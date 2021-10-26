@@ -8,7 +8,7 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-    {% form_theme profilForm 'bootstrap_5_layout.html.twig' %}
+    {% form_theme profilForm 'bootstrap_4_layout.html.twig' %}
 <div class="card container mt-3 ">
 
     <h2 class="card-header">Mon profil</h2>
@@ -87,7 +87,8 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        {{ form_widget(profilForm.photo) }}
+                        <input type="file" name="{{ field_name(profilForm.photo) }}" class="custom-file-input" id="customFileLang" >
+                        <label class="custom-file-label" for="customFileLang" data-browse="Choisir un fichier">Aucun fichier choisi</label>
                     </div>
                 </div>
                 <div style="padding: 1rem 0">
