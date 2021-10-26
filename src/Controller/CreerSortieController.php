@@ -65,6 +65,14 @@ class CreerSortieController extends AbstractController
             ->getForm();
         $creationForm->handleRequest($request);
 
+
+        $lieuForm = $this->createFormBuilder()
+            ->add('nomLieu', TextType::class)
+            ->add('rueLieu', TextType::class)
+            ->getForm();
+
+        $lieuForm->handleRequest($request);
+
         if($creationForm->isSubmitted() && $creationForm->isValid()){
 
             $data = $creationForm->getData();
@@ -98,6 +106,7 @@ class CreerSortieController extends AbstractController
         return $this->render('creer_sortie/index.html.twig', [
             'controller_name' => 'CreerSortieController',
             'creationForm' => $creationForm->createView(),
+            'formLieu' => $lieuForm->createView(),
             'villes' => $villes,
             'site' => $site,
         ]);
