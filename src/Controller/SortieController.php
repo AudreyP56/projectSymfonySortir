@@ -11,15 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
-
-
     /**
      * @Route("/sorties", name="sorties")
      */
 
     public function index(Request $request): Response
     {
-
         $user = $this->getUser();
         $userId = $user->getId();
 

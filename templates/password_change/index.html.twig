@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset Password!{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div class="example-wrapper">
+
+        <h1>Lien de changement password</h1>
+    </div>
+    <div class="container container-fluid">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-lg-8">
+                {{ form_start(form, { attr: { 'accept-charset' : 'utf-8' }}) }}
+                <div class="form-group">
+                </div>
+                <div class="form-group">
+                    {#                    {{ form_widget(form.send, {'label': "Demande envoyé", 'attr' : { 'class': 'btn btn-primary' }}) }}#}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
