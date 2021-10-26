@@ -1,0 +1,13 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>404 ça race !
+
+    <p>
+       vous êtes hors application perdu dans le néan il n'y a rien ici !
+    </p>
+    <p>
+    Revenez au <a href="{{ path('app_login') }}">login </a>.
+    </p>
+{% endblock %}
