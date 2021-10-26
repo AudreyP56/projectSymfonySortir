@@ -187,19 +187,21 @@ class GestionnaireProfilController extends AbstractController
         return ['fileName' => $fileName, 'res' => $bool];
     }
 
+    // route de demande de réinitialisation du mot de pass
     #[Route('/gestionnaire/demand_new_password', name: 'gestionnaire_password')]
     public function askForResetPassword(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ResetPasswordType::class);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form['email']->getData();
-
+            // idealement cet email servirait par la suite pour l'envois du lien de changement du mot de pass
+            // ici on va vérifié que l'utilisateur existe en faisant une recherche en base
             $repo = $entityManager->getRepository(User::class);
-
             $user = $repo->findOneBy(['email' =>$email]);
 
+            //si aucun utilisateur connu on envois un message d'erreur
             if ($user == null){
                 $this->addFlash('error', "Nous en sommes surpris et peiné mais sommes au regret de vous informez que vous n'existez pas!");
 
@@ -208,7 +210,7 @@ class GestionnaireProfilController extends AbstractController
                 ]);
             }
 
-            $userId = $user->getId();
+            // on génère le futur lien pour le reset
             $link = new ResetLink();
             $newLink = $link->setLinkExtension($this->generateRandomString());
             $user->setResetLink($newLink);
@@ -216,9 +218,10 @@ class GestionnaireProfilController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // on renvois l'utilisateur vers son lien de changement de mot de pass
             $param = $user->getResetLink()->getLinkExtension();
 
-            return $this->redirectToRoute('gestionnaire_reset_password', ["link"=>$param]);
+            return $this->redirectToRoute('gestionnaire_reset_password', ["randomlink"=>$param]);
         }
 
         return $this->render('reset_password/index.html.twig', [
@@ -226,30 +229,21 @@ class GestionnaireProfilController extends AbstractController
         ]);
     }
 
-    private function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
+    // methode qui permet de saisir un nouveau mot de pass
+    #[Route('/gestionnaire/reset_password/{randomlink}', name: 'gestionnaire_reset_password')]
 
-    #[Route('/gestionnaire/reset_password/{link}', name: 'gestionnaire_reset_password')]
-
-    public function resetPassword(Request $request,$link, EntityManagerInterface $entityManager)
+    public function resetPassword(Request $request,$randomlink, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(PasswordChangeType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // on récupère les eux champs de saisi
             $newPassword = $form['password']->getData();
             $newPasswordConfirmation = $form['passwordConfirm']->getData();
 
-
             $emReset = $entityManager->getRepository(ResetLink::class);
-            $link = $emReset->findBy(['linkExtension'=>$link]);
+            $link = $emReset->findBy(['linkExtension'=>$randomlink]);
             $user = $link[0]->getUser();
 
             $em = $entityManager->getRepository(User::class);
@@ -272,10 +266,12 @@ class GestionnaireProfilController extends AbstractController
                      $entityManager->flush();
                      $this->addFlash('success', "Victoire vous avez un nouveau mot de pass, pensez à l'enregistrer cette fois, rdv sur la page de login");
 
-                     //ON supprime la ligne dans la base pour ne plus avoir accès au lien
+                     //On supprime la ligne dans la base pour ne plus avoir accès au lien
                      $entityManager->getRepository(ResetLink::class);
                      $entityManager->remove($link[0]);
                      $entityManager->flush();
+
+                     return $this->redirectToRoute('app_login');
                  }
 
         }
@@ -283,4 +279,15 @@ class GestionnaireProfilController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }
+
+    // Genere une suite aléatoire pour le lien de reset du mot de pass
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 }
