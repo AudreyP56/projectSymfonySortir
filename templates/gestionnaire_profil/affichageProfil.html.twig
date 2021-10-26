@@ -4,22 +4,38 @@
 
 {% block body %}
     {% include('navbar.html.twig') %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; display: grid;
-            grid-template-columns: repeat(2, 0.5fr); grid-gap: 10px; grid-auto-rows: minmax(50px, auto);}
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
 
-    <div class="example-wrapper">
-        <h1 style="grid-row: 1; grid-column: auto">{{ profil.pseudo }}</h1>
-        <h3 style="grid-row: 3; grid-column: 1/2">Prénom : </h3>
-        <h3 style="grid-row: 3; grid-column: 2">{{ profil.prenom }}</h3>
-        <h3 style="grid-row: 4; grid-column: 1/2">Nom : </h3>
-        <h3 style="grid-row: 4; grid-column: 2">{{ profil.nom }}</h3>
-        <h3 style="grid-row: 5; grid-column: 1/2">Téléphone : </h3>
-        <h3 style="grid-row: 5; grid-column: 2">{{ profil.telephone }}</h3>
-        <h3 style="grid-row: 6; grid-column: 1/2">Email : </h3>
-        <h3 style="grid-row: 6; grid-column: 2">{{ profil.email }}</h3>
-        <h3 style="grid-row: 7; grid-column: 1/2">Ville de rattachement : </h3>
+
+    <div class="card container mt-3" style="width: 30%">
+        <h2 class="card-header">{{ profil.pseudo }}</h2>
+        {% if(imageProfilNom != null) %}
+            <img class="card-img-top" src="{{ imageProfilNom }}">
+        {% endif %}
+        <div class="card-body">
+
+
+
+            <div class="row mb-3">
+                <h5 class="form-label">Prénom : </h5>
+                <p class="col">{{ profil.prenom }}</p>
+            </div>
+            <div class="row mb-3">
+                <h5 class="form-label">Nom : </h5>
+                <p class="col">{{ profil.nom }}</p>
+            </div>
+            <div class="row mb-3">
+                <h5 class="form-label">Téléphone : </h5>
+                <p class="col">{{ profil.telephone }}</p>
+            </div>
+            <div class="row mb-3">
+                <h5 class="form-label">Email : </h5>
+                <p class="col">{{ profil.email }}</p>
+            </div>
+            <div class="row mb-3">
+                <h5 class="form-label">Site de rattachement : </h5>
+                <p class="col">{{ profil.site.nom }}</p>
+            </div>
+
+        </div>
     </div>
 {% endblock %}

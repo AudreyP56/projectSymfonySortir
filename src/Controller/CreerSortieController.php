@@ -43,7 +43,7 @@ class CreerSortieController extends AbstractController
         $repoLieu = $this->getDoctrine()->getRepository(Lieu::class);
         $repoEtat = $this->getDoctrine()->getRepository(Etat::class);
 
-        $site = $repoSite->find($user->getSiteId());
+        $site = $repoSite->find($user->getSite());
         $villes = $repoVille->findAll();
 
 
@@ -118,7 +118,7 @@ class CreerSortieController extends AbstractController
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         $lieu = $repoLieu->find($sortie->getLieuId());
 
-        $site = $repoSite->find($user->getSiteId());
+        $site = $repoSite->find($user->getSite());
         $villes = $repoVille->findAll();
 
         $creationForm = $this->createFormBuilder()
@@ -193,7 +193,7 @@ class CreerSortieController extends AbstractController
 
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         $lieu = $repoLieu->find($sortie->getLieuId());
-        $site = $repoSite->find($user->getSiteId());
+        $site = $repoSite->find($user->getSite());
 
 
         return $this->render('creer_sortie/affichage.html.twig', [
