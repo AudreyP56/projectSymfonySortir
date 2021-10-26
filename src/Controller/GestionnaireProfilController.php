@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Site;
 use App\Entity\User;
+use App\Form\PasswordChangeType;
+use App\Form\ResetPasswordTypeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -184,4 +186,76 @@ class GestionnaireProfilController extends AbstractController
         return ['fileName' => $fileName, 'res' => $bool];
     }
 
+    #[Route('/gestionnaire/password', name: 'gestionnaire_password')]
+    public function resetPassword(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ResetPasswordTypeType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form['email']->getData();
+
+            $repo = $entityManager->getRepository(User::class);
+            $user = $repo->findOneBy(['email' =>$email]);
+
+            if ($user == null){
+                $this->addFlash('error', "Nous en sommes surpris et peiné mais sommes au regret de vous informez que vous n'existez pas!");
+
+                return $this->render('reset_password/index.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            $userId = $user->getId();
+            return $this->redirectToRoute('gestionnaire_reset_password', ["user"=>$userId]);
+        }
+
+        return $this->render('reset_password/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+   
+
+    #[Route('/gestionnaire/reset_password/{user}', name: 'gestionnaire_reset_password')]
+
+    public function otherAction(Request $request,User $user, EntityManagerInterface $entityManager)
+    {
+
+        $form = $this->createForm(PasswordChangeType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newPassword = $form['password']->getData();
+            $newPasswordConfirmation = $form['passwordConfirm']->getData();
+
+            $repo = $entityManager->getRepository(User::class);
+
+                 if( $newPassword != null && $newPasswordConfirmation != null)
+                 {
+                     #On check si les deux sont égaux ou pas.
+                     if($newPassword != $newPasswordConfirmation)
+                     {
+                         $this->addFlash('error', 'Le mot de passe et sa confirmation ne sont pas identiques');
+
+                         return $this->render('password_change/index.html.twig', [
+                             'form' => $form->createView(),
+                         ]);
+                     }
+
+                     $user->setPassword(password_hash($newPassword, PASSWORD_DEFAULT));
+
+                     $entityManager->persist($user);
+                     $entityManager->flush();
+                     $this->addFlash('success', "Victoire vous avez un nouveau mot de pass, pensez à l'enregistrer cette fois, rdv sur la page de login");
+
+                 }
+
+        }
+            return $this->render('password_change/index.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
+
 }
+//$profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
