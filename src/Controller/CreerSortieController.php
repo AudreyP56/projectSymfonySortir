@@ -43,7 +43,7 @@ class CreerSortieController extends AbstractController
         $repoLieu = $this->getDoctrine()->getRepository(Lieu::class);
         $repoEtat = $this->getDoctrine()->getRepository(Etat::class);
 
-        $site = $repoSite->find($user->getSiteId());
+        $site = $repoSite->find($user->getSite());
         $villes = $repoVille->findAll();
 
 
@@ -69,9 +69,28 @@ class CreerSortieController extends AbstractController
         $lieuForm = $this->createFormBuilder()
             ->add('nomLieu', TextType::class)
             ->add('rueLieu', TextType::class)
+            ->add('sauvegarder', SubmitType::class)
             ->getForm();
 
         $lieuForm->handleRequest($request);
+
+        if($lieuForm->isSubmitted() && $lieuForm->isValid())
+        {
+            $lieu = new Lieu();
+            $data = $lieuForm->getData();
+
+            $lieu->setNom($data['nomLieu']);
+            $lieu->setRue($data['rueLieu']);
+
+            $ville = $entityManager->getRepository(Ville::class)->find(1);
+
+            $lieu->setVille($ville);
+
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sorties');
+        }
 
         if($creationForm->isSubmitted() && $creationForm->isValid()){
 
@@ -127,7 +146,7 @@ class CreerSortieController extends AbstractController
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         $lieu = $repoLieu->find($sortie->getLieuId());
 
-        $site = $repoSite->find($user->getSiteId());
+        $site = $repoSite->find($user->getSite());
         $villes = $repoVille->findAll();
 
         $creationForm = $this->createFormBuilder()
@@ -202,7 +221,7 @@ class CreerSortieController extends AbstractController
 
         $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         $lieu = $repoLieu->find($sortie->getLieuId());
-        $site = $repoSite->find($user->getSiteId());
+        $site = $repoSite->find($user->getSite());
 
 
         return $this->render('creer_sortie/affichage.html.twig', [
