@@ -1,17 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Reset Password!{% endblock %}
-
+{% block stylesheets %}
+    <link href="{{ asset('library/website/css/login.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
     <style>
         .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     </style>
 
-    <div class="example-wrapper">
-
-        <h1>Lien de changement password</h1>
-    </div>
     <div class="container container-fluid">
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">
@@ -23,16 +21,35 @@
                 {{ message }}
             </div>
         {% endfor %}
-        <div class="row">
-            <div class="col-lg-8">
-                {{ form_start(form, { attr: { 'accept-charset' : 'utf-8' }}) }}
-                <div class="form-group">
-                </div>
-                <div class="form-group">
-                    {#                    {{ form_widget(form.send, {'label': "Demande envoyé", 'attr' : { 'class': 'btn btn-primary' }}) }}#}
-                </div>
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
+    </div>
+
+    <div class="col-lg-6 col-md-8 login-box " style="
+    margin: auto;">
+        <div class="col-lg-12 login-form">
+{#            <div class="form-group">#}
+                <div class="col-lg-8" style=" margin: auto;">
+                    <div class="col-lg-12 login-title">
+                        SAISISSEZ VOTRE NOUVEAU MOT DE PASSE
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            {{ form_start(form, { attr: { 'accept-charset' : 'utf-8' }}) }}
+                            <div class="form-group">
+                                <label class="form-control-label">nouveau mot de passe</label>
+                                {{ form_widget(form.password, {'label': "nouveau mot de passe", 'attr' : { 'class': '' }}) }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Confirmer le nouveau mot de passe</label>
+                                {{ form_widget(form.passwordConfirm, {'label': "confirmer le mot de passe", 'attr' : { 'class': '' }}) }}
+                            </div>
+                            <div class="col-lg-6 login-button">
+                                <button type="submit" name={{ field_name(form.send) }} class="btn btn-outline-primary">REINITIALISER</button>
+                            </div>
+                            {{ form_rest(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+{#                </div>#}
             </div>
         </div>
     </div>
