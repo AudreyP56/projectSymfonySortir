@@ -188,7 +188,7 @@ class GestionnaireProfilController extends AbstractController
     }
 
     // route de demande de réinitialisation du mot de pass
-    #[Route('/gestionnaire/demand_new_password', name: 'gestionnaire_password')]
+    #[Route('/demand_new_password', name: 'demand_new_password')]
     public function askForResetPassword(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ResetPasswordType::class);
@@ -221,7 +221,7 @@ class GestionnaireProfilController extends AbstractController
             // on renvois l'utilisateur vers son lien de changement de mot de pass
             $param = $user->getResetLink()->getLinkExtension();
 
-            return $this->redirectToRoute('gestionnaire_reset_password', ["randomlink"=>$param]);
+            return $this->redirectToRoute('reset_password', ["randomlink"=>$param]);
         }
 
         return $this->render('reset_password/index.html.twig', [
@@ -230,7 +230,7 @@ class GestionnaireProfilController extends AbstractController
     }
 
     // methode qui permet de saisir un nouveau mot de pass
-    #[Route('/gestionnaire/reset_password/{randomlink}', name: 'gestionnaire_reset_password')]
+    #[Route('/reset_password/{randomlink}', name: 'reset_password')]
 
     public function resetPassword(Request $request,$randomlink, EntityManagerInterface $entityManager)
     {
@@ -238,12 +238,16 @@ class GestionnaireProfilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // on récupère les eux champs de saisi
+            // on récupère les deux champs de saisi
             $newPassword = $form['password']->getData();
             $newPasswordConfirmation = $form['passwordConfirm']->getData();
 
             $emReset = $entityManager->getRepository(ResetLink::class);
             $link = $emReset->findBy(['linkExtension'=>$randomlink]);
+            if(empty($link)){
+                $this->addFlash('error', "Le lien de changement de mot de pass n'est plus valide merci d'en redemander un ... gentiment !! Crier sur votre ordianteurs n'arrangera rien");
+                return $this->redirectToRoute('demand_new_password');
+            }
             $user = $link[0]->getUser();
 
             $em = $entityManager->getRepository(User::class);
