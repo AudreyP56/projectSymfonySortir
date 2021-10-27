@@ -65,8 +65,6 @@ class CreationLieuController extends AbstractController
             return new Response("La ville n'a pas été selectionnée");
         }
 
-
-
         return $this->redirectToRoute('sorties');
     }
 }
