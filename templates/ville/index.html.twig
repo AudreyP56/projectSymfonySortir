@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#villeModal">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="villeModal" tabindex="-1" role="dialog" aria-labelledby="villeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="villeModalLabel">création de ville</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(formVille) }}
+                    <div class="row">
+                        <div class="col-4">
+                            {{ form_label(formVille.nomVille) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_widget(formVille.nomVille) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            {{ form_label(formVille.code_postal) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_widget(formVille.code_postal) }}
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="lancementAjaxVille()" data-dismiss="modal">Enregistrer</button>
+                    {{ form_end(formVille) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function lancementAjaxVille()
+        {
+            let nom = document.getElementById('form_nomVille').value;
+            let code_postal = document.getElementById('form_code_postal').value;
+
+            let form = {'nom':nom, 'code_postal': code_postal, };
+
+                fetch( "http://127.0.0.1:8000/sauvegarder/ville",
+                    {
+                        method: "POST",
+                        body: JSON.stringify(form)
+                    })
+                    .then(response => console.log(response))
+                    .then(() => {
+                        chargementVille()
+                    });
+        }
+    </script>
+{% endblock %}
+
+{#{{ app.request.server.get('AJAX_URL') }}#}

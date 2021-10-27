@@ -53,15 +53,24 @@
                 <div class="mb-3">
                     <label class="form-label" for="ville">Ville</label>
                     <select class="form-control" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
-                        <option value="0" selected>-- Sélectionner une Ville --</option >
+                  {#      <option value="0" selected>-- Sélectionner une Ville --</option >
                         {% for ville in villes %}
                             {% if app.request.attributes.get('_route') == 'modifier_sortie' and ville== lieu.getVille() %}
                                 <option value="{{ ville.id }}"  selected>{{ ville.nom }}</option >
                             {% else %}
                                 <option value="{{ ville.id }}">{{ ville.nom }}</option >
                             {% endif %}
-                        {% endfor %}
+                        {% endfor %}#}
+
+                        {% block javascript %}
+                        <script>
+                           chargementVille();
+                        </script>
+                        {% endblock %}
+
+
                     </select>
+                    {{ render(controller('App\\Controller\\VilleController::index')) }}
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="lieu">Lieu</label>

@@ -24,6 +24,28 @@ function chargementLieu( lieuparam = null){
             }
         })
 }
+
+function chargementVille(){
+
+    // let idVille = document.getElementById("ville").value;
+    let selectVille = document.getElementById("ville");
+
+    fetch("http://127.0.0.1:8000/listeville")
+        .then(response => response.json())
+        .then((villes)=> {
+            console.log(villes)
+            selectVille.innerHTML = "";
+            let defaut = document.createElement("option");
+            defaut.innerText = "-- Sélectionner un lieu --";
+            selectVille.appendChild(defaut);
+            for (const chaqueVille of villes){
+                let ville = document.createElement("option");
+                ville.innerText = chaqueVille.nom;
+                ville.value = chaqueVille.id
+                selectVille.appendChild(ville);
+            }
+        })
+}
 // function chargementRue(){
 //     let nomLieu = document.getElementById("lieu").value;
 //     let input = document.getElementById("rue");
