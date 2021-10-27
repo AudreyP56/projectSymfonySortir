@@ -76,18 +76,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $sorties;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @var \DateTime
-     */
-    private $updatedAt;
 
     /**
-     * @Vich\UploadableField(mapping="product_images", fileNameProperty="image")
-     * @var File
+     * @ORM\OneToOne(targetEntity=ResetLink::class, mappedBy="user", cascade={"persist", "remove"})
      */
-    private $imageFile;
-
+    private $resetLink;
 
     public function __construct()
     {
@@ -136,7 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+//        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -284,33 +277,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getResetLink(): ?ResetLink
     {
-        return $this->updatedAt;
+        return $this->resetLink;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setResetLink(ResetLink $resetLink): self
     {
-        $this->updatedAt = $updatedAt;
+        // set the owning side of the relation if necessary
+        if ($resetLink->getUser() !== $this) {
+            $resetLink->setUser($this);
+        }
+
+        $this->resetLink = $resetLink;
 
         return $this;
-    }
-
-    public function setImageFile(File $image = null)
-    {
-        $this->imageFile = $image;
-
-        // VERY IMPORTANT:
-        // It is required that at least one field changes if you are using Doctrine,
-        // otherwise the event listeners won't be called and the file is lost
-        if ($image) {
-            // if 'updatedAt' is not defined in your entity, use another property
-            $this->updatedAt = new \DateTime('now');
-        }
-    }
-
-    public function getImageFile()
-    {
-        return $this->imageFile;
     }
 }

@@ -25,7 +25,7 @@ class AnnulationSortieController extends AbstractController
 
         $lieu = $currentSortie->getLieuId();
 
-        $ville = $lieu->getVilleId();
+        $ville = $lieu->getVille();
 
         $annulationSortieForm = $this->createFormBuilder()
             ->add('motif', TextareaType::class, ['label' => 'Motif :'])

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Site;
 use App\Entity\Sortie;
-use App\Form\SortieFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,15 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
-
-
     /**
      * @Route("/sorties", name="sorties")
      */
 
     public function index(Request $request): Response
     {
-
         $user = $this->getUser();
         $userId = $user->getId();
 
@@ -102,4 +98,6 @@ class SortieController extends AbstractController
     public function update(){
         dd('modifier');
     }
+
+
 }
