@@ -88,7 +88,6 @@
             <th class="table-sortie" scope="col">Inscrit</th>
             <th class="table-sortie" scope="col">Organisateur</th>
             <th class="table-sortie" scope="col">Actions</th>
-            <th class="table-sortie" scope="col">Voir lieu sur carte</th>
         </tr>
         </thead>
         <tbody>
@@ -116,10 +115,6 @@
                 {% else %}
                     <a href="{{ path('afficher_sortie', {id: sortie.id}) }}"> Afficher </a>
                 {% endif %}
-            </td>
-            <td class="table-sortie">
-                <iframe src="https://maps.google.com/maps?q={{ sortie.getLieuId().getLongitude() }} {{ sortie.getLieuId().getLatitude() }}&hl=es;z=5&amp;output=embed" width="130" height="130" frameborder="0" style="border:0"></iframe>
-
             </td>
         </tr>
             {% for message in app.flashes('error') %}
