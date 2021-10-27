@@ -17,8 +17,8 @@ class VilleController extends AbstractController
     public function index(): Response
     {
         $VilleForm = $this->createFormBuilder()
-            ->add('nomVille', TextType::class, ['required' => false])
-            ->add('code_postal', TextType::class, ['required' => false])
+            ->add('nomVille', TextType::class, ['required' => true])
+            ->add('code_postal', TextType::class, ['required' => true])
             ->getForm();
 
         return $this->render('ville/index.html.twig', [

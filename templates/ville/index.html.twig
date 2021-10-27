@@ -50,16 +50,22 @@
             let code_postal = document.getElementById('form_code_postal').value;
 
             let form = {'nom':nom, 'code_postal': code_postal, };
-
-                fetch( "http://127.0.0.1:8000/sauvegarder/ville",
+            if(nom == 0 || code_postal == 0)
+            {
+                window.alert('Tous les champs sont obligatoire');
+            }
+           else {
+                fetch("http://127.0.0.1:8000/sauvegarder/ville",
                     {
                         method: "POST",
                         body: JSON.stringify(form)
                     })
                     .then(response => console.log(response))
                     .then(() => {
+                        console.log(nom)
                         chargementVille()
                     });
+            }
         }
     </script>
 {% endblock %}
