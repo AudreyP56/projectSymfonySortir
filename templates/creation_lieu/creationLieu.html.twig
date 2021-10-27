@@ -57,12 +57,15 @@
             }
             else
             {
-                fetch('http://127.0.0.1:8001/sauvegarder/lieu',
+                fetch('http://127.0.0.1:8000/sauvegarder/lieu',
                     {
                         method: "POST",
                         body: JSON.stringify(form)
                     })
-                    .then(response => console.log(response));
+                    .then(response => console.log(response))
+                .then(() => {
+                    chargementLieu();
+                });
             }
         }
     </script>
