@@ -32,12 +32,11 @@ class CreationLieuController extends AbstractController
 
 
     #[Route('sauvegarder/lieu', name: 'sauvegarde_lieu')]
-    public function recupDonnee(Request $request, EntityManagerInterface $entityManager)
+    public function recupDonnee(Request $request, EntityManagerInterface $entityManager) : Response
     {
         $lieu = new Lieu();
 
         $data = json_decode($request->getContent(), true);
-
 
         $resource = fopen('sortie.txt', 'w');
 
