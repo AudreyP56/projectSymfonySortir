@@ -23,16 +23,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreerSortieController extends AbstractController
 {
-    #[Route('/sortie', name: 'sortie')]
-    public function index(): Response
-    {
-        return $this->render('creer_sortie/index.html.twig', [
-            'controller_name' => 'CreerSortieController',
-
-        ]);
-    }
     #[Route('/sortie/creer', name: 'creer_sortie')]
-    public function creation(Request $request, EntityManagerInterface $entityManager): Response{
+    public function creation(Request $request, EntityManagerInterface $entityManager): Response {
+
         //user courant
         $user = $this->getUser();
         $userBase = $entityManager->getRepository(User::class)->find($user->getId());

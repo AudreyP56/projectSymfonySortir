@@ -1,10 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CreationLieuController!{% endblock %}
-
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
@@ -40,7 +37,7 @@
                         {{ form_widget(formLieu.rueLieu) }}
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="lancementAjax()">Enregistrer</button>
+                <button type="button" class="btn btn-primary" onclick="lancementAjax()" data-dismiss="modal">Enregistrer</button>
                 {{ form_end(formLieu) }}
             </div>
         </div>
@@ -51,13 +48,22 @@
         {
             let nomLieu = document.getElementById('form_nomLieu').value;
             let rueLieu = document.getElementById('form_rueLieu').value;
-            let form = {'nom':nomLieu, 'rue': rueLieu};
-            fetch('http://127.0.0.1:8000/sauvegarder/lieu',
-                {
-                    method: "POST",
-                    body: JSON.stringify(form)
-                })
-                .then(response => console.log(response));
+            let idVille = document.getElementById('ville').value;
+            let form = {'nom':nomLieu, 'rue': rueLieu, 'ville': idVille};
+            if(idVille == 0)
+            {
+                window.alert('La ville n\'a pas été sélectionnée, vous ne pouvez pas ajouter de lieu');
+
+            }
+            else
+            {
+                fetch('http://127.0.0.1:8001/sauvegarder/lieu',
+                    {
+                        method: "POST",
+                        body: JSON.stringify(form)
+                    })
+                    .then(response => console.log(response));
+            }
         }
     </script>
 {% endblock %}

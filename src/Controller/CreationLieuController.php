@@ -7,6 +7,7 @@ use App\Entity\Ville;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,18 +38,35 @@ class CreationLieuController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        $lieu->setNom($data['nom']);
 
-        $lieu->setRue($data['rue']);
+        $resource = fopen('sortie.txt', 'w');
 
-        $ville = $entityManager->getRepository(Ville::class)->find(1);
+        fwrite($resource, implode("/", $data));
 
-        $lieu->setVille($ville);
+        fclose($resource);
 
-        $entityManager->persist($lieu);
-        $entityManager->flush();
+        if(array_key_exists('ville', $data) && $data['ville'] != 0)
+        {
+            $lieu->setNom($data['nom']);
+
+            $lieu->setRue($data['rue']);
+
+            $idVille = $data['ville'];
+
+            $ville = $entityManager->getRepository(Ville::class)->find($idVille);
+
+            $lieu->setVille($ville);
+
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+        }
+        else
+        {
+            return new Response("La ville n'a pas été selectionnée");
+        }
+
+
 
         return $this->redirectToRoute('sorties');
     }
-
 }
