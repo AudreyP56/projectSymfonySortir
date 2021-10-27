@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Lieu;
 use App\Entity\Ville;
+
+use App\Trait\CallApiAdress;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class CreationLieuController extends AbstractController
 {
+    use CallApiAdress ;
+
     #[Route('/creation/lieu', name: 'creation_lieu')]
     public function index(): Response
     {
@@ -38,7 +43,6 @@ class CreationLieuController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-
         $resource = fopen('sortie.txt', 'w');
 
         fwrite($resource, implode("/", $data));
@@ -57,15 +61,23 @@ class CreationLieuController extends AbstractController
 
             $lieu->setVille($ville);
 
+            // mise à jour lieu
+            $result= $this->fetchApi( $lieu,$ville);
+            if (!empty($result)){
+                $lieu->setLatitude($result[1]);
+                $lieu->setLongitude($result[0]);
+            }
+
             $entityManager->persist($lieu);
             $entityManager->flush();
+
+
+
         }
         else
         {
             return new Response("La ville n'a pas été selectionnée");
         }
-
-
 
         return $this->redirectToRoute('sorties');
     }

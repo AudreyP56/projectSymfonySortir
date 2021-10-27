@@ -1,25 +1,36 @@
 <?php
+namespace App\Trait;
 
+use App\Entity\Lieu;
+use App\Entity\Ville;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 
 trait CallApiAdress
 {
-    public function fetchApi(): array
+    public function fetchApi(Lieu $lieu,Ville $ville): array
     {
+        $adresse = $lieu->getRue();
+//        $param = str_replace(" ","+",$adresse);
+        $codePostal = $ville->getCodePostal();
+        $nomVille = $ville->getNom();
+
         $client = HttpClient::create();
-        $response = $client->request('GET', 'https://api-adresse.data.gouv.fr/search/?q=12+avenue+des+fauvettes+44470+carquefou');
+        $response = $client->request('GET', "https://api-adresse.data.gouv.fr/search/?q=".$adresse."+".$codePostal."+".$nomVille);
+
+//        $response = $client->request('GET', "https://api-adresse.data.gouv.fr/search/?q=12+avenue+des+fauvettes+44470+carquefou");
 
         $statusCode = $response->getStatusCode();
-// $statusCode = 200
+
         $contentType = $response->getHeaders()['content-type'][0];
-// $contentType = 'application/json'
+
         $content = $response->getContent();
-// $content = '{"id":521583, "name":"symfony-docs", ...}'
-//            $content = $response->toArray();
-// $content = ['id' => 521583, 'name' => 'symfony-docs', ...]
 
-        $test =json_decode($content);
+        $data =json_decode($content);
 
-        dd($test->features[0]->geometry->coordinates);
+        $result = $data->features[0]->geometry->coordinates;
+        return $result;
+
+
     }
 }
