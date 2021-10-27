@@ -59,8 +59,7 @@ class CreerSortieController extends AbstractController
         $creationForm->handleRequest($request);
 
 
-
-        if($creationForm->isSubmitted() && $creationForm->isValid()){
+        if($creationForm->isSubmitted()){
 
             $data = $creationForm->getData();
 
