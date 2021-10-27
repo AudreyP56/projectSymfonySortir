@@ -75,6 +75,7 @@
     </form>
 </div>
     <div class="card-footer">
+{#<<<<<<< HEAD#}
         <h4 class="card-title">Liste des sorties :</h4>
         <div class="table-responsive">
         <table class="table table-striped">
@@ -100,7 +101,11 @@
                 <td class="table-sortie">{{ sortie.dateLimite|format_datetime() }}</td>
                 <td class="table-sortie">{{ sortie.nbPlace }}</td>
                 <td class="table-sortie">{{ sortie.getEtat().label }}</td>
-                <td class="table-sortie">bollean if participant</td>
+                <td class="table-sortie">
+                    {% if sortie.isParticipant(user)  %}
+                        <p> INSCRIT</p>
+                    {% endif %}
+                </td>
                 <td class="table-sortie"><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
                 <td  {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
                     {% if sortie.isParticipant(user)  %}
@@ -126,6 +131,7 @@
                         {{ message }}
                     </div>
                 {% endfor %}
+
             {% endfor %}
             </tbody>
         </table>

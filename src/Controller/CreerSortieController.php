@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,9 +59,7 @@ class CreerSortieController extends AbstractController
             ->getForm();
         $creationForm->handleRequest($request);
 
-
         if($creationForm->isSubmitted()){
-
             $data = $creationForm->getData();
 
             $lieu = $repoLieu->findBy(["nom" => $data["lieu"]]);
@@ -83,6 +82,7 @@ class CreerSortieController extends AbstractController
                 $etatOuverte = $repoEtat->findBy(['label'=> Etat::STATUS_OUVERTE]);
                 $sortie->setEtat( $etatOuverte[0]);
             }
+
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -133,9 +133,7 @@ class CreerSortieController extends AbstractController
             ->getForm();
         $creationForm->handleRequest($request);
 
-
-
-        if($creationForm->isSubmitted() && $creationForm->isValid()){
+        if($creationForm->isSubmitted()){
             $data = $creationForm->getData();
 
             $lieuSelect = $repoLieu->findBy(["nom" => $data["lieu"]]);

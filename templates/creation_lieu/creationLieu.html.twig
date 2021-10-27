@@ -57,7 +57,7 @@
             }
             else
             {
-                fetch('http://127.0.0.1:8000/sauvegarder/lieu',
+                fetch( "http://127.0.0.1:8000/sauvegarder/lieu",
                     {
                         method: "POST",
                         body: JSON.stringify(form)
@@ -70,3 +70,5 @@
         }
     </script>
 {% endblock %}
+
+{#{{ app.request.server.get('AJAX_URL') }}#}
