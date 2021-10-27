@@ -31,7 +31,7 @@ class SortieController extends AbstractController
         if(!$user->getActif())
         {
             #Essayer de voir si on ne peut pas écrire un message pour l'user
-            return $this->redirectToRoute("app_login", ['erreur' => 'Le compte est inactif']);
+            return $this->redirectToRoute("app_logout", ['erreur' => 'Le compte est inactif']);
         }
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
