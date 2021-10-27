@@ -50,8 +50,8 @@ class CreerSortieController extends AbstractController
         //formulaire
         $creationForm = $this->createFormBuilder()
             ->add('nom', TextType::class)
-            ->add('dateHeureSortie', DateTimeType::class)
-            ->add('dateLimite', DateType::class)
+            ->add('dateHeureSortie', DateTimeType::class,['data'=> new \DateTime()])
+            ->add('dateLimite', DateType::class, ['data' => new \DateTime()])
             ->add('nbPlace', NumberType::class)
             ->add('duree', NumberType::class)
             ->add('description', TextareaType::class)

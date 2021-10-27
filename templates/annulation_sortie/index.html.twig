@@ -7,49 +7,30 @@
 {% block body %}
     {% include 'navbar.html.twig' %}
     {% form_theme annulationSortieForm 'bootstrap_4_layout.html.twig' %}
-<div class="card container mt-3" style="width: 50%;">
+<div class="card container mt-3 w-50" >
     <h2 class="card-header">Annuler une sortie</h2>
     {{ form_start(annulationSortieForm) }}
     <div class="card-body ps-5">
-        <div class="row">
-            <div class="col-3">
-                <p>Nom de la sortie: </p>
-            </div>
-            <div class="col-3">
-                <p>{{ sortie.nom }}</p>
-            </div>
+
+        <div class="row mb-3">
+            <h5 class="form-label">Nom de la sortie:</h5>
+            <p class="col">{{ sortie.nom }}</p>
         </div>
-        <div class="row">
-            <div class="col-3">
-                <p>Date de la sortie: </p>
-            </div>
-            <div class="col-3">
-                <p>{{ sortie.dateHeureSortie | date('d/m/Y')}}</p>
-            </div>
+        <div class="row mb-3">
+            <h5 class="form-label">Date de la sortie:</h5>
+            <p class="col">{{ sortie.dateHeureSortie | date('d/m/Y')}}</p>
         </div>
-        <div class="row">
-            <div class="col-3">
-                <p>Ville organisatrice: </p>
-            </div>
-            <div class="col-3">
-                <p>{{ ville.nom }}</p>
-            </div>
+        <div class="row mb-3">
+            <h5 class="form-label">Ville organisatrice:</h5>
+            <p class="col">{{ ville.nom}}</p>
         </div>
-        <div class="row">
-            <div class="col-3">
-                <p>Lieu: </p>
-            </div>
-            <div class="col-4">
-                <p>{{ lieu.nom }} <br/> {{ lieu.rue }} <br/> {{ ville.codePostal }} {{ ville.nom }}</p>
-            </div>
+        <div class="row mb-3">
+            <h5 class="form-label">Lieu:</h5>
+            <p class="col">{{ lieu.nom }}, {{ lieu.rue }}, {{ ville.codePostal }} {{ ville.nom }}</p>
         </div>
-        <div class="row">
-            <div class="col-3">
-                {{ form_label(annulationSortieForm.motif) }}
-            </div>
-            <div class="col-4">
-                {{ form_widget(annulationSortieForm.motif) }}
-            </div>
+        <div class="row mb-3">
+            <h5 class="form-label">{{ form_label(annulationSortieForm.motif) }}</h5>
+            <p class="col ">{{ form_widget(annulationSortieForm.motif) }}</p>
         </div>
         <div style="padding: 1rem 0">
             <button type="submit" class="btn btn-primary">Enregistrer</button>
