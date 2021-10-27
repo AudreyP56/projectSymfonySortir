@@ -70,6 +70,7 @@
                        {% endif %}
                     </select>
                     {{ render(controller('App\\Controller\\CreationLieuController::index')) }}
+                </div>
                 <div class="mb-3">
                     <label class="form-label" for="rue">Rue</label>
                     <input class="form-control" type="text" id="rue" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.rue }}" {% endif%} name="{{ field_name(creationForm.rue) }}" disabled >
@@ -87,16 +88,16 @@
                     <input class="form-control" type="text" id="longitude" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.longitude }}" {% endif%} name="{{ field_name(creationForm.longitude) }}" >
                 </div>
             </div>
+            <div  style="padding: 1rem 0;">
+                <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
+                <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
+                {% if  app.request.attributes.get('_route') == 'modifier_sortie' %}
+                    <button type="submit" name="{{ field_name(creationForm.supprimer) }}" class="btn btn-secondary">Supprimer la sortie</button>
+                {% endif %}
+                <a class="btn btn-danger"  href="{{ url('sorties') }}" name="annuler">Annuler</a>
+            </div>
         </div>
-        </div>
-        <div  style="padding: 1rem 0;">
-            <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
-            <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
-            {% if  app.request.attributes.get('_route') == 'modifier_sortie' %}
-                <button type="submit" name="{{ field_name(creationForm.supprimer) }}" class="btn btn-secondary">Supprimer la sortie</button>
-            {% endif %}
-            <a class="btn btn-danger"  href="{{ url('sorties') }}" name="annuler">Annuler</a>
-        </div>
+
         {{ form_end(creationForm) }}
     </div>
     <script>

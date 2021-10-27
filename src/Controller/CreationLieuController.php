@@ -20,8 +20,8 @@ class CreationLieuController extends AbstractController
     public function index(): Response
     {
         $lieuForm = $this->createFormBuilder()
-            ->add('nomLieu', TextType::class)
-            ->add('rueLieu', TextType::class)
+            ->add('nomLieu', TextType::class, ['required' => false])
+            ->add('rueLieu', TextType::class, ['required' => false])
             ->getForm();
 
         return $this->render('creation_lieu/creationLieu.html.twig', [
