@@ -23,16 +23,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreerSortieController extends AbstractController
 {
-    #[Route('/sortie', name: 'sortie')]
-    public function index(): Response
-    {
-        return $this->render('creer_sortie/index.html.twig', [
-            'controller_name' => 'CreerSortieController',
-
-        ]);
-    }
     #[Route('/sortie/creer', name: 'creer_sortie')]
-    public function creation(Request $request, EntityManagerInterface $entityManager): Response{
+    public function creation(Request $request, EntityManagerInterface $entityManager): Response {
+
         //user courant
         $user = $this->getUser();
         $userBase = $entityManager->getRepository(User::class)->find($user->getId());
@@ -64,6 +57,33 @@ class CreerSortieController extends AbstractController
             ->add('saveEtPublier', SubmitType::class, ['label' => 'Publier'])
             ->getForm();
         $creationForm->handleRequest($request);
+
+
+        $lieuForm = $this->createFormBuilder()
+            ->add('nomLieu', TextType::class)
+            ->add('rueLieu', TextType::class)
+            ->add('sauvegarder', SubmitType::class)
+            ->getForm();
+
+        $lieuForm->handleRequest($request);
+
+        if($lieuForm->isSubmitted() && $lieuForm->isValid())
+        {
+            $lieu = new Lieu();
+            $data = $lieuForm->getData();
+
+            $lieu->setNom($data['nomLieu']);
+            $lieu->setRue($data['rueLieu']);
+
+            $ville = $entityManager->getRepository(Ville::class)->find(1);
+
+            $lieu->setVille($ville);
+
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sorties');
+        }
 
         if($creationForm->isSubmitted() && $creationForm->isValid()){
 
@@ -98,6 +118,7 @@ class CreerSortieController extends AbstractController
         return $this->render('creer_sortie/index.html.twig', [
             'controller_name' => 'CreerSortieController',
             'creationForm' => $creationForm->createView(),
+            'formLieu' => $lieuForm->createView(),
             'villes' => $villes,
             'site' => $site,
         ]);
