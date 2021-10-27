@@ -6,14 +6,16 @@
 {% endblock %}
 {% block body %}
     {% include('navbar.html.twig') %}
+    
+    
     {% form_theme creationForm 'bootstrap_4_layout.html.twig' %}
+    {{ form_start(creationForm) }}
     <div class="container card mt-3">
         {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
             <h2 class="card-header">Modifier une sortie</h2>
         {% else %}
             <h2 class="card-header">Créer une sortie</h2>
         {% endif %}
-        {{ form_start(creationForm) }}
         <div class="card-body row-test">
             <div class="col">
                 <div class="mb-3">
@@ -73,6 +75,7 @@
                        {% endif %}
                     </select>
                     {{ render(controller('App\\Controller\\CreationLieuController::index')) }}
+                </div>
                 <div class="mb-3">
                     <label class="form-label" for="rue">Rue</label>
                     <input class="form-control" type="text" id="rue" {% if app.request.attributes.get('_route') == 'modifier_sortie'%} value="{{ lieu.rue }}" {% endif%} name="{{ field_name(creationForm.rue) }}" disabled >
@@ -91,7 +94,6 @@
                 </div>
             </div>
         </div>
-        </div>
         <div  style="padding: 1rem 0;">
             <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
             <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
@@ -100,8 +102,8 @@
             {% endif %}
             <a class="btn btn-danger"  href="{{ url('sorties') }}" name="annuler">Annuler</a>
         </div>
-        {{ form_end(creationForm) }}
     </div>
+    {{ form_end(creationForm) }}
     <script>
         function chargementRue(){
             let nomLieu = document.getElementById("lieu").value;

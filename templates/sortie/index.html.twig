@@ -11,8 +11,9 @@
 <div class="card container mt-3">
 
 <div class="card-body">
-    <h5 class="card-titre">Filtrer les sorties :</h5>
+
     <form role="search" id="search-form" method="post" action="{{ path('sorties') }}">
+        <h4 class="card-titre">Filtrer les sorties :</h4>
         <div class="form-group row">
             <label class="mr-sm-2" for="inlineFormCustomSelect">Site</label>
             <select class="form-control mr-sm-2" id="inlineFormCustomSelect" name="site">
@@ -23,10 +24,8 @@
             </select>
         </div>
         <div class="form-group row">
-            <label for="search" class="col-sm-2 col-form-label">Le nom de la sortie contient</label>
-            <div class="col-sm-10">
-                <input type="search" name="search" class="form-control" id="search" placeholder="search">
-            </div>
+            <label for="search" class="col-form-label">Le nom de la sortie contient</label>
+            <input type="search" name="search" class="form-control mr-sm-2" id="search" placeholder="search">
         </div>
 
         <div class="form-group row">
@@ -76,58 +75,61 @@
     </form>
 </div>
     <div class="card-footer">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Nom de la sortie</th>
-            <th scope="col">Lieu</th>
-            <th scope="col">Date de la sortie</th>
-            <th class="table-sortie" scope="col">Clôture</th>
-            <th class="table-sortie" scope="col">Inscrit/places</th>
-            <th class="table-sortie" scope="col">Etat</th>
-            <th class="table-sortie" scope="col">Inscrit</th>
-            <th class="table-sortie" scope="col">Organisateur</th>
-            <th class="table-sortie" scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for sortie in sorties %}
-        <tr >
-            <th scope="row">{{ sortie.nom }}</th>
-            <td>{{ sortie.getLieuId().nom }}</td>
-            <td>{{ sortie.dateHeureSortie|format_datetime() }}</td>
-            <td class="table-sortie">{{ sortie.dateLimite|format_datetime() }}</td>
-            <td class="table-sortie">{{ sortie.nbPlace }}</td>
-            <td class="table-sortie">{{ sortie.getEtat().label }}</td>
-            <td class="table-sortie">bollean if participant</td>
-            <td class="table-sortie"><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
-            <td class="table-sortie" {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
-                {% if sortie.isParticipant(user)  %}
-                    <a href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
-                {% elseif  sortie.dateLimite > date() %}
-                    <a href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
-                {% endif %}
-                {% if sortie.getOrganisateur == user and sortie.getEtat().label == ('En création') %}
-                    <a href="{{ path('modifier_sortie',{id: sortie.id} ) }}"> Modifier </a>
-                    <a href="{{ path('annulation_sortie', {id:sortie.id}) }}">Annuler</a>
-                {% else %}
-                    <a href="{{ path('afficher_sortie', {id: sortie.id}) }}"> Afficher </a>
-                {% endif %}
-            </td>
-        </tr>
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-warning">
-                    {{ message }}
-                </div>
+        <h4 class="card-title">Liste des sorties :</h4>
+        <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Lieu</th>
+                <th scope="col">Date de la sortie</th>
+                <th class="table-sortie" scope="col">Clôture</th>
+                <th class="table-sortie" scope="col">Inscrit/places</th>
+                <th class="table-sortie" scope="col">Etat</th>
+                <th class="table-sortie" scope="col">Inscrit</th>
+                <th class="table-sortie" scope="col">Organisateur</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+            <tr >
+                <th scope="row">{{ sortie.nom }}</th>
+                <td>{{ sortie.getLieuId().nom }}</td>
+                <td>{{ sortie.dateHeureSortie|format_datetime() }}</td>
+                <td class="table-sortie">{{ sortie.dateLimite|format_datetime() }}</td>
+                <td class="table-sortie">{{ sortie.nbPlace }}</td>
+                <td class="table-sortie">{{ sortie.getEtat().label }}</td>
+                <td class="table-sortie">bollean if participant</td>
+                <td class="table-sortie"><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
+                <td  {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
+                    {% if sortie.isParticipant(user)  %}
+                        <a class="table-sortie" href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
+                    {% elseif  sortie.dateLimite > date() %}
+                        <a class="table-sortie" href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
+                    {% endif %}
+                    {% if sortie.getOrganisateur == user and sortie.getEtat().label == ('En création') %}
+                        <a class="table-sortie" href="{{ path('modifier_sortie',{id: sortie.id} ) }}"> Modifier </a>
+                        <a class="table-sortie" href="{{ path('annulation_sortie', {id:sortie.id}) }}">Annuler</a>
+                    {% else %}
+                        <a href="{{ path('afficher_sortie', {id: sortie.id}) }}"> Afficher </a>
+                    {% endif %}
+                </td>
+            </tr>
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+        </div>
         <a class="btn btn-dark" id="creerSortie" href="{{ url('creer_sortie') }}">créer une sortie</a>
     </div>
 
