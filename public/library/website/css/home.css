@@ -7,6 +7,22 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-gap: 16px;
 }
+.duree{
+    display: flex;
+    justify-content: space-between;
+}
+.form-duree{
+    width: min-content;
+    margin-left: 1rem;
+}
+.lieu{
+    display: flex;
+    justify-content: space-between;
+}
+.form-lieu{
+    width: min-content;
+    margin-left: 1rem;
+}
 @media screen and (min-width: 600px) and (min-height: 900px){
     #search-form{
         display: none;
