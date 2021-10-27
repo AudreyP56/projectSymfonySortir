@@ -59,33 +59,6 @@ class CreerSortieController extends AbstractController
             ->getForm();
         $creationForm->handleRequest($request);
 
-
-//        $lieuForm = $this->createFormBuilder()
-//            ->add('nomLieu', TextType::class)
-//            ->add('rueLieu', TextType::class)
-//            ->add('sauvegarder', SubmitType::class)
-//            ->getForm();
-//
-//        $lieuForm->handleRequest($request);
-//
-//        if($lieuForm->isSubmitted() && $lieuForm->isValid())
-//        {
-//            $lieu = new Lieu();
-//            $data = $lieuForm->getData();
-//
-//            $lieu->setNom($data['nomLieu']);
-//            $lieu->setRue($data['rueLieu']);
-//
-//            $ville = $entityManager->getRepository(Ville::class)->find(1);
-//
-//            $lieu->setVille($ville);
-//
-//            $entityManager->persist($lieu);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('sorties');
-//        }
-
         if($creationForm->isSubmitted() && $creationForm->isValid()){
 
             $data = $creationForm->getData();
