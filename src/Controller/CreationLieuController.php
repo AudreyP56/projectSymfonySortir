@@ -64,8 +64,8 @@ class CreationLieuController extends AbstractController
             // mise à jour lieu
             $result= $this->fetchApi( $lieu,$ville);
             if (!empty($result)){
-                $lieu->setLatitude($result[1]);
-                $lieu->setLongitude($result[0]);
+                $lieu->setLatitude($result[0]);
+                $lieu->setLongitude($result[1]);
             }
 
             $entityManager->persist($lieu);
