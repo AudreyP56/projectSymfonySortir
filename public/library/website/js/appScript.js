@@ -45,7 +45,6 @@ function chargementVille(){
         })
 }
 
-
 function konami() {
     var allowedKeys = {
         37: 'left',
