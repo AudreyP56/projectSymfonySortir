@@ -12,6 +12,31 @@ body {
     color: white;
 }
 
+.duree{
+    display: flex;
+    justify-content: space-between;
+}
+.form-duree{
+    width: min-content;
+    margin-left: 1rem;
+}
+.lieu{
+    display: flex;
+    justify-content: space-between;
+}
+.form-lieu{
+    width: min-content;
+    margin-left: 1rem;
+}
+.sorties-title{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+}
+ul.nav li:hover > ul.dropdown-menu {
+    display: block;
+}
+
 @media screen and (min-width: 600px) and (min-height: 900px){
     #search-form{
         display: none;
@@ -29,6 +54,10 @@ body {
     }
     .navbar-mobile{
         display: none;
+    }
+    .container{
+        max-width:90%;
+        max-height: 90%;
     }
 }
 
