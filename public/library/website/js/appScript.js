@@ -28,7 +28,6 @@ function chargementLieu( lieuparam = null){
 
 function chargementVille(){
 
-    // let idVille = document.getElementById("ville").value;
     let selectVille = document.getElementById("ville");
 
     fetch("http://127.0.0.1:8000/listeville")
