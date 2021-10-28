@@ -64,6 +64,7 @@ class CreerSortieController extends AbstractController
 
             $data = $creationForm->getData();
 
+            $lieu = $repoLieu->findBy(["nom" => $data["lieu"]]);
 
             if($data["dateLimite"] <= $data["dateHeureSortie"]){
                 if(($data["lieu"] !== "0") && ($data["lieu"] !== "-- Sélectionner un lieu --") ) {
