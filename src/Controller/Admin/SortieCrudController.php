@@ -2,10 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -26,16 +28,8 @@ class SortieCrudController extends AbstractCrudController
             IdField::new('id'),
             TextField::new('nom'),
             AssociationField::new('organisateur'),
-            DateTimeField::new('dateLimite'),
-            DateField::new('dateHeureSortie')
+            DateTimeField::new('dateLimite')->setFormat("dd/MM/YYYY HH:mm"),
+            DateField::new('dateHeureSortie')->setFormat('dd/MM/YYYY'),
         ];
-    }
-
-    public function configureCrud(Crud $crud): Crud
-    {
-        return $crud
-            ->setDateFormat(DateTimeField::FORMAT_MEDIUM)
-            ->setDateTimeFormat(DateTimeField::FORMAT_LONG)
-            ->;
     }
 }
