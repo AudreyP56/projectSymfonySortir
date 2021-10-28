@@ -5,7 +5,7 @@
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     </style>
 
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#villeModal">
+    <button type="button" class="btn btn-primary btn-sm" onclick="console.log(vartest)" data-toggle="modal" data-target="#villeModal">
         <i class="fas fa-plus"></i>
     </button>
 
@@ -44,6 +44,8 @@
         </div>
     </div>
     <script>
+        let vartest = "toto"
+
         function lancementAjaxVille()
         {
             let nom = document.getElementById('form_nomVille').value;
@@ -52,7 +54,7 @@
             let form = {'nom':nom, 'code_postal': code_postal, };
             if(nom == 0 || code_postal == 0)
             {
-                window.alert('Tous les champs sont obligatoire');
+                window.alert('Tous les champs sont obligatoires');
             }
            else {
                 fetch("http://127.0.0.1:8000/sauvegarder/ville",
