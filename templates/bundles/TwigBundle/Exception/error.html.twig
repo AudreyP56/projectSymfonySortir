@@ -1,7 +1,24 @@
 {# templates/bundles/TwigBundle/Exception/error404.html.twig #}
-{% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link href="{{ asset('library/website/css/error.scss') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
-    <h1>Il y a une erreur</h1>
+
+    <body>
+    <section class="notFound">
+        <div class="img">
+            <img src="https://assets.codepen.io/5647096/backToTheHomepage.png" alt="Back to the Homepage"/>
+            <img src="https://assets.codepen.io/5647096/Delorean.png" alt="El Delorean, El Doc y Marti McFly"/>
+        </div>
+        <div class="text">
+            <h1>ERREUR</h1>
+            <h2></h2>
+            <h3>RETOUR A L'ACCUEIL?</h3>
+            <a href="#" class="yes">OUI</a>
+            <a href="https://www.youtube.com/watch?v=G3AfIvJBcGo">NON</a>
+        </div>
+    </section>
+    </body>
 
 {% endblock %}
