@@ -93,6 +93,21 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
 
+
+    public function updateStatusSortie()
+    {
+        $today = new \DateTime("now");
+
+        return $this->createQueryBuilder('s')
+            ->join(Etat::class, 'et', 'WITH', 'et.id = s.etat')
+            ->andWhere('s.dateHeureSortie < :val')
+            ->setParameter('val', $today)
+            ->andWhere('et.label != :val2')
+            ->setParameter('val2', 'archive')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Sortie
     {
