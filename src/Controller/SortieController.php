@@ -20,6 +20,12 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $userId = $user->getId();
 
+        if(!$user->getActif())
+        {
+            #Essayer de voir si on ne peut pas écrire un message pour l'user
+            return $this->redirectToRoute("app_logout", ['erreur' => 'Le compte est inactif']);
+        }
+
         $searchParam =$request->request->all();
 
         $sorties = $this->getDoctrine()
@@ -28,11 +34,7 @@ class SortieController extends AbstractController
         $sites = $this->getDoctrine()
             ->getRepository(Site::class)->findAll();
 
-        if(!$user->getActif())
-        {
-            #Essayer de voir si on ne peut pas écrire un message pour l'user
-            return $this->redirectToRoute("app_logout", ['erreur' => 'Le compte est inactif']);
-        }
+
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
             'sites'=> $sites,
