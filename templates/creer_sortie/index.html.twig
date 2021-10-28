@@ -51,16 +51,17 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="ville">Ville</label>
-                    <select class="form-control" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
-                        <option value="0" selected>-- Sélectionner une Ville --</option >
-                        {% for ville in villes %}
-                            {% if app.request.attributes.get('_route') == 'modifier_sortie' and ville== lieu.getVille() %}
-                                <option value="{{ ville.id }}"  selected>{{ ville.nom }}</option >
-                            {% else %}
-                                <option value="{{ ville.id }}">{{ ville.nom }}</option >
-                            {% endif %}
-                        {% endfor %}
-                    </select>
+                    <div class="ville">
+                        <select class="form-control" id="ville" name="ville" aria-label="Default select example" onchange="chargementLieu()">
+                            {% if villes != null %}<option value="0" selected>-- Sélectionner une Ville --</option >
+                                {% for ville in villes %}{% if app.request.attributes.get('_route') == 'modifier_sortie' and ville == lieu.getVille() %}<option value="{{ ville.id }}"  selected>{{ ville.nom }}</option >
+                                {% else %}<option value="{{ ville.id }}">{{ ville.nom }}</option >
+                                {% endif %}{% endfor %}{% else %}{% block javascript %}<script>
+                                chargementVille();
+                            </script>
+                            {% endblock %}{% endif %}</select>
+                        <p class="form-ville">{{ render(controller('App\\Controller\\VilleController::index')) }}</p>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="lieu">Lieu</label>
