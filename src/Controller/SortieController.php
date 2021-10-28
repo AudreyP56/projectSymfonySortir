@@ -74,7 +74,9 @@ class SortieController extends AbstractController
                 'Aucune sortie de trouvée restez chez vous ! '
             );
         }
-
+        if($sortie->getParticipants()->count() >= $sortie->getNbPlace()){
+            return   $this->addFlash('error',  "Plus d'inscriptions pour ".$sortie->getNom() ." le nombre de place a été atteint !");
+        }
         if ( $sortie->getDateLimite() < $today) {
          return   $this->addFlash('error',  "les inscriptions/désinscription pour ".$sortie->getNom() ." sont closes désolé!");
         }
