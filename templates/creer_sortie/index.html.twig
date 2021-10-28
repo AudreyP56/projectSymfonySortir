@@ -66,6 +66,7 @@
                     <label class="form-label" for="lieu">Lieu</label>
                     <div class="lieu">
                     <select class="form-control" id="lieu" name="{{ field_name(creationForm.lieu) }}"  aria-label="Default select example" onchange="chargementRue()" >
+                        <option value="0" selected>-- Sélectionner une Ville en premier --</option >
                         {% if app.request.attributes.get('_route') == 'modifier_sortie' %}
                             {% block javscript %}
                             <script>
@@ -95,6 +96,11 @@
                 </div>
             </div>
         </div>
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div  style="padding: 1rem 0;">
             <button type="submit" name="{{ field_name(creationForm.save) }}" class="btn btn-primary">Enregistrer</button>
             <button type="submit" name="{{ field_name(creationForm.saveEtPublier) }}" class="btn btn-success">Publier la sortie</button>
