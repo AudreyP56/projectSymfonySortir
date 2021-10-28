@@ -1,13 +1,29 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('library/website/css/breakingNew.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-        <a class="navbar-brand" href="{{ path('sorties') }}">  <img  width="150" height="150" src="{{ asset('./../uploads/logoSortir2.png') }}"></a>
+        <a class="navbar-brand" href="{{ path('sorties') }}">  <img  width="100%" height="100" src="{{ asset('./../uploads/logo_long.png') }}"></a>
         <button class="navbar-toggler collapsed navbar-mobile" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <div class="onoffswitch3">
+            <input type="checkbox" name="onoffswitch3" class="onoffswitch3-checkbox" id="myonoffswitch3" checked>
+            <label class="onoffswitch3-label" for="myonoffswitch3">
+        <span class="onoffswitch3-inner">
+            <span class="onoffswitch3-active">
+                <marquee class="scroll-text">DEPECHEZ VOUS AVANT LE PROCHAIN CONFINEMENT <span class="glyphicon glyphicon-forward"></span> OU L'EFFONDREMENT DE LA SOCIETE !  <span class="glyphicon glyphicon-forward"></span> ... ou d'avoir des enfants</marquee>
+                <span class="onoffswitch3-switch">BREAKING NEWS <span class="glyphicon glyphicon-remove"></span></span>
+            </span>
+            <span class="onoffswitch3-inactive"><span class="onoffswitch3-switch">SHOW BREAKING NEWS</span></span>
+        </span>
+            </label>
+        </div>
 
         <div class="collapse navbar-collapse navbar-mobile" id="navbarTogglerDemo03" style>
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
