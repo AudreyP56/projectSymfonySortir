@@ -15,7 +15,7 @@
                 {% if(profil.photo != null) %}
                     <img src="{{ imageProfilNom }}">
                     {% else %}
-                        <img src="./../uploads/imageDefaut.png" alt="Image par defaut de l'utilisateur">
+                        <img src="{{ asset('./../uploads/imageDefaut.png') }}" alt="Image par defaut de l'utilisateur">
                 {% endif %}
             </div>
             <div class="col">
