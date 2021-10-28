@@ -37,7 +37,7 @@ function chargementVille(){
             console.log(villes)
             selectVille.innerHTML = "";
             let defaut = document.createElement("option");
-            defaut.innerText = "-- Sélectionner un lieu --";
+            defaut.innerText = "-- Sélectionner un ville --";
             selectVille.appendChild(defaut);
             for (const chaqueVille of villes){
                 let ville = document.createElement("option");

@@ -20,6 +20,14 @@ body {
     width: min-content;
     margin-left: 1rem;
 }
+.ville{
+    display: flex;
+    justify-content: space-between;
+}
+.form-ville{
+    width: min-content;
+    margin-left: 1rem;
+}
 .lieu{
     display: flex;
     justify-content: space-between;
