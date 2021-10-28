@@ -8,6 +8,7 @@ function chargementLieu( lieuparam = null){
             select.innerHTML = "";
             let defaut = document.createElement("option");
             defaut.innerText = "-- Sélectionner un lieu --";
+            defaut.value = "0";
             select.appendChild(defaut);
             for (const chaqueLieu of lieux){
                 if(lieuparam === chaqueLieu.nom){
