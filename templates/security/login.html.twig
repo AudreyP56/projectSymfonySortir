@@ -39,6 +39,11 @@
                     <div class="col-lg-12 login-title">
                         CONNEXION
                     </div>
+                    {% for message in app.flashes('danger') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
 
                     <div class="col-lg-12 login-form">
                         <div class="col-lg-12 login-form">

@@ -2,20 +2,23 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
+use App\Entity\Etat;
+use App\Entity\Sortie;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class UserCrudController extends AbstractCrudController
+class SortieCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return User::class;
+        return Sortie::class;
     }
 
 
@@ -24,13 +27,9 @@ class UserCrudController extends AbstractCrudController
         return [
             IdField::new('id'),
             TextField::new('nom'),
-            TextField::new('prenom'),
-            TextField::new('pseudo'),
-            TextField::new('telephone'),
-            TextField::new('email'),
-            ArrayField::new('roles'),
-            BooleanField::new('actif'),
-            AssociationField::new('site')
+            AssociationField::new('organisateur'),
+            DateTimeField::new('dateLimite')->setFormat("dd/MM/YYYY HH:mm"),
+            DateField::new('dateHeureSortie')->setFormat('dd/MM/YYYY'),
         ];
     }
 }

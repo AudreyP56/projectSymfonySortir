@@ -50,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $pseudo;
 
@@ -76,11 +76,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $sorties;
 
-
     /**
-     * @ORM\OneToOne(targetEntity=ResetLink::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $resetLink;
+    private $actif;
+
 
     public function __construct()
     {
@@ -129,7 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-//        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -277,19 +277,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getResetLink(): ?ResetLink
+    public function getActif(): ?bool
     {
-        return $this->resetLink;
+        return $this->actif;
     }
 
-    public function setResetLink(ResetLink $resetLink): self
+    public function setActif(?bool $actif): self
     {
-        // set the owning side of the relation if necessary
-        if ($resetLink->getUser() !== $this) {
-            $resetLink->setUser($this);
-        }
-
-        $this->resetLink = $resetLink;
+        $this->actif = $actif;
 
         return $this;
     }
