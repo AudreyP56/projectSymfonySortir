@@ -13,9 +13,9 @@
         <div class="row-test">
             <div class="col">
                 {% if(profil.photo != null) %}
-                    <img src="{{ imageProfilNom }}">
+                    <img class="rounded" src="{{ imageProfilNom }}">
                     {% else %}
-                        <img src="{{ asset('./../uploads/imageDefaut.png') }}" alt="Image par defaut de l'utilisateur">
+                        <img class="rounded" src="{{ asset('./../uploads/imageDefaut.png') }}" alt="Image par defaut de l'utilisateur">
                 {% endif %}
             </div>
             <div class="col">
