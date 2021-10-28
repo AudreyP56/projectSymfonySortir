@@ -33,24 +33,37 @@ class ArchiveSortieCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $today = new \DateTime("now");
+        $addOneMonth = $today->modify( 'first day of next month' );
 
         $em = $this->entityManager;
 
         $repo = $em->getRepository(Sortie::class);
-        $sorties = $repo->archiveOldSortie();
+
+         $sorties = $repo->updateStatusSortie();
 
         $repoEtat = $em->getRepository(Etat::class);
-        $etat = $repoEtat->findOneBy( ['label' => Etat::STATUS_ARCHIVE],);
+        $etatArchive = $repoEtat->findOneBy( ['label' => Etat::STATUS_ARCHIVE],);
+        $etatFerme = $repoEtat->findOneBy( ['label' => Etat::STATUS_FERME],);
 
-        $nbSortieUpdate = 0;
+        $nbSortieFermée = 0;
+        $nbSortieArchivée = 0;
+
         foreach ($sorties as $sortie){
-            $sortie->setEtat($etat);
+            if ($sortie->getDateHeureSortie() > $addOneMonth ){
+                $sortie->setEtat($etatArchive);
+                $nbSortieArchivée += 1;
+            }elseif ($sortie->getEtat() != $etatFerme){
+                $sortie->setEtat($etatFerme);
+                $nbSortieFermée +=1;
+            }
+
             $em->persist($sortie);
             $em->flush();
-            $nbSortieUpdate += 1;
+
         }
 
-        $output->writeln("A été archivé ". $nbSortieUpdate . " sorties");
+        $output->writeln("A été fermée ".$nbSortieFermée . " sortie(s) et ".$nbSortieArchivée . " ont été archivée");
         return Command::SUCCESS;
     }
 }

@@ -8,6 +8,7 @@ function chargementLieu( lieuparam = null){
             select.innerHTML = "";
             let defaut = document.createElement("option");
             defaut.innerText = "-- Sélectionner un lieu --";
+            defaut.value = "0";
             select.appendChild(defaut);
             for (const chaqueLieu of lieux){
                 if(lieuparam === chaqueLieu.nom){
@@ -21,6 +22,28 @@ function chargementLieu( lieuparam = null){
                     lieu.innerText = chaqueLieu.nom;
                     select.appendChild(lieu);
                 }
+            }
+        })
+}
+
+function chargementVille(){
+
+    // let idVille = document.getElementById("ville").value;
+    let selectVille = document.getElementById("ville");
+
+    fetch("http://127.0.0.1:8000/listeville")
+        .then(response => response.json())
+        .then((villes)=> {
+            console.log(villes)
+            selectVille.innerHTML = "";
+            let defaut = document.createElement("option");
+            defaut.innerText = "-- Sélectionner un ville --";
+            selectVille.appendChild(defaut);
+            for (const chaqueVille of villes){
+                let ville = document.createElement("option");
+                ville.innerText = chaqueVille.nom;
+                ville.value = chaqueVille.id
+                selectVille.appendChild(ville);
             }
         })
 }

@@ -1,18 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello CsvController!{% endblock %}
-
+{% block stylesheets %}
+    <link href="{{ asset('library/website/css/login.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-
-    <h1>Import USERs via CSV</h1>
-</div>
-{#{% block content %}#}
     <div class="container container-fluid">
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">
@@ -24,20 +21,43 @@
                 {{ message }}
             </div>
         {% endfor %}
-        <div class="row">
-            <div class="col-lg-8">
-                {{ form_start(form, { attr: { 'accept-charset' : 'utf-8' }}) }}
-                <div class="form-group">
-                    {{ form_label(form.upload_file) }}
-                    {{ form_widget(form.upload_file) }}
-                    {{ form_errors(form.upload_file) }}
+    </div>
+
+    <div class="col-lg-6 col-md-8 login-box " style="
+    margin: auto;">
+        <div class="col-lg-12 login-form">
+                        <div class="form-group">
+            <div class="col-lg-8" style=" margin: auto;">
+                <div class="col-lg-12 login-title">
+                    IMPORTER DES UTILISATEURS VIA UN FICHIER .CSV
                 </div>
-                <div class="form-group">
-                    {{ form_widget(form.send, {'label': "Upload this file", 'attr' : { 'class': 'btn btn-primary' }}) }}
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        {{ form_start(form, { attr: { 'accept-charset' : 'utf-8' }}) }}
+                        <div class="form-group">
+                            {{ form_label(form.upload_file) }}
+                            {{ form_widget(form.upload_file) }}
+                            {{ form_errors(form.upload_file) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.send, {'label': "Upload this file", 'attr' : { 'class': 'btn btn-primary' }}) }}
+                        </div>
+{#                        <div class="col-lg-6 login-button">#}
+{#                            <button type="submit" name={{ field_name(form.send) }} class="btn btn-outline-primary">REINITIALISER</button>#}
+{#                        </div>#}
+                        {{ form_rest(form) }}
+                        {{ form_end(form) }}
+                    </div>
                 </div>
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
             </div>
+                        </div>
         </div>
     </div>
+
+
+
+
+
+
+
 {% endblock %}

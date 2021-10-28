@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,8 +44,8 @@ class CreerSortieController extends AbstractController
         //formulaire
         $creationForm = $this->createFormBuilder()
             ->add('nom', TextType::class)
-            ->add('dateHeureSortie', DateTimeType::class,['data'=> new \DateTime()])
-            ->add('dateLimite', DateType::class, ['data' => new \DateTime()])
+            ->add('dateHeureSortie', DateTimeType::class,['data'=> new \DateTime(), 'widget'=>'single_text'])
+            ->add('dateLimite', DateType::class, ['data' => new \DateTime(), 'widget'=>'single_text'])
             ->add('nbPlace', NumberType::class)
             ->add('duree', NumberType::class)
             ->add('description', TextareaType::class)
@@ -65,28 +66,41 @@ class CreerSortieController extends AbstractController
 
             $lieu = $repoLieu->findBy(["nom" => $data["lieu"]]);
 
-            $sortie = new Sortie();
-            $sortie->setOrganisateur($userBase);
-            $sortie->setNom($data["nom"]);
-            $sortie->setDateHeureSortie($data["dateHeureSortie"]);
-            $sortie->setDateLimite($data["dateLimite"]);
-            $sortie->setNbPlace($data["nbPlace"]);
-            $sortie->setDuree($data["duree"]);
-            $sortie->setDescription($data["description"]);
-            $sortie->setLieuId($lieu[0]);// a verifier
+            if($data["dateLimite"] <= $data["dateHeureSortie"]){
+                if(($data["lieu"] !== "0") && ($data["lieu"] !== "-- Sélectionner un lieu --") ) {
+                    $lieuSelect = $repoLieu->findBy(["nom" => $data["lieu"]]);
+                    $lieu = $lieuSelect[0];
+                    $sortie = new Sortie();
+                    $sortie->setOrganisateur($userBase);
+                    $sortie->setNom($data["nom"]);
+                    $sortie->setDateHeureSortie($data["dateHeureSortie"]);
+                    $sortie->setDateLimite($data["dateLimite"]);
+                    $sortie->setNbPlace($data["nbPlace"]);
+                    $sortie->setDuree($data["duree"]);
+                    $sortie->setDescription($data["description"]);
+                    $sortie->setLieuId($lieu);// a verifier
 
-            if ($creationForm->get('save')->isClicked() ) {
-                $etatCreation = $repoEtat->findBy(['label'=> Etat::STATUS_EN_CREATION]);
-                $sortie->setEtat($etatCreation[0]);
-            }
-            if ($creationForm->get('saveEtPublier')->isClicked() ) {
-                $etatOuverte = $repoEtat->findBy(['label'=> Etat::STATUS_OUVERTE]);
-                $sortie->setEtat( $etatOuverte[0]);
-            }
-            $entityManager->persist($sortie);
-            $entityManager->flush();
+                    if ($creationForm->get('save')->isClicked()) {
+                        $etatCreation = $repoEtat->findBy(['label' => Etat::STATUS_EN_CREATION]);
+                        $sortie->setEtat($etatCreation[0]);
+                    }
+                    if ($creationForm->get('saveEtPublier')->isClicked()) {
+                        $etatOuverte = $repoEtat->findBy(['label' => Etat::STATUS_OUVERTE]);
+                        $sortie->setEtat($etatOuverte[0]);
+                    }
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
 
-            return $this->redirectToRoute('sorties');
+                    return $this->redirectToRoute('sorties');
+                }
+                else{
+                    $this->addFlash('error', 'Sélectionner un lieu !');
+                }
+            }
+            else{
+                $this->addFlash('error', 'La date limite doit être inférieur à la date de sortie !');
+            }
+
         }
 
         return $this->render('creer_sortie/index.html.twig', [
@@ -117,8 +131,8 @@ class CreerSortieController extends AbstractController
 
         $creationForm = $this->createFormBuilder()
             ->add('nom', TextType::class, ['attr'=> ['value'=>$sortie->getNom()]])
-            ->add('dateHeureSortie', DateTimeType::class, ['data'=>$sortie->getDateHeureSortie()])
-            ->add('dateLimite', DateType::class, ['data'=>$sortie->getDateLimite()])
+            ->add('dateHeureSortie', DateTimeType::class, ['data'=>$sortie->getDateHeureSortie(), 'widget'=>'single_text'])
+            ->add('dateLimite', DateType::class, ['data'=>$sortie->getDateLimite(), 'widget'=>'single_text'])
             ->add('nbPlace', NumberType::class, ['attr'=>['value'=>$sortie->getNbPlace()]])
             ->add('duree', NumberType::class, ['attr'=>['value'=>$sortie->getDuree()]])
             ->add('description', TextareaType::class, ['data'=>$sortie->getDescription()])
@@ -133,38 +147,45 @@ class CreerSortieController extends AbstractController
             ->getForm();
         $creationForm->handleRequest($request);
 
-
-
-        if($creationForm->isSubmitted() && $creationForm->isValid()){
+        if($creationForm->isSubmitted()){
             $data = $creationForm->getData();
+            if($data["dateLimite"] <= $data["dateHeureSortie"]) {
+                if (($data["lieu"] !== "0") && ($data["lieu"] !== "-- Sélectionner un lieu --")) {
+                    $lieuSelect = $repoLieu->findBy(["nom" => $data["lieu"]]);
+                    $lieu = $lieuSelect[0];
+                    $sortie->setOrganisateur($userBase);
+                    $sortie->setNom($data["nom"]);
+                    $sortie->setDateHeureSortie($data["dateHeureSortie"]);
+                    $sortie->setDateLimite($data["dateLimite"]);
+                    $sortie->setNbPlace($data["nbPlace"]);
+                    $sortie->setDuree($data["duree"]);
+                    $sortie->setDescription($data["description"]);
+                    $sortie->setLieuId($lieu);// a verifier
 
-            $lieuSelect = $repoLieu->findBy(["nom" => $data["lieu"]]);
-            $lieu = $lieuSelect[0];
-            $sortie->setOrganisateur($userBase);
-            $sortie->setNom($data["nom"]);
-            $sortie->setDateHeureSortie($data["dateHeureSortie"]);
-            $sortie->setDateLimite($data["dateLimite"]);
-            $sortie->setNbPlace($data["nbPlace"]);
-            $sortie->setDuree($data["duree"]);
-            $sortie->setDescription($data["description"]);
-            $sortie->setLieuId($lieu);// a verifier
+                    if ($creationForm->get('save')->isClicked()) {
+                        $etatCreation = $repoEtat->findBy(['label' => Etat::STATUS_EN_CREATION]);
+                        $sortie->setEtat($etatCreation[0]);
+                    }
+                    if ($creationForm->get('saveEtPublier')->isClicked()) {
+                        $etatOuverte = $repoEtat->findBy(['label' => Etat::STATUS_OUVERTE]);
+                        $sortie->setEtat($etatOuverte[0]);
+                    }
+                    if ($creationForm->get('supprimer')->isClicked()) {
+                        $entityManager->remove($sortie);
+                        $entityManager->flush($sortie);
+                        return $this->redirectToRoute('sorties');
+                    }
+                    $entityManager->flush();
 
-            if ($creationForm->get('save')->isClicked() ) {
-                $etatCreation = $repoEtat->findBy(['label'=> Etat::STATUS_EN_CREATION]);
-                $sortie->setEtat($etatCreation[0]);
+                    return $this->redirectToRoute('sorties');
+                }
+                else{
+                    $this->addFlash('error', 'Sélectionner un lieu !');
+                }
             }
-            if ($creationForm->get('saveEtPublier')->isClicked() ) {
-                $etatOuverte = $repoEtat->findBy(['label'=> Etat::STATUS_OUVERTE]);
-                $sortie->setEtat( $etatOuverte[0]);
+            else{
+                $this->addFlash('error', 'La date limite doit être inférieur à la date de sortie !');
             }
-            if($creationForm->get('supprimer')->isClicked()){
-                $entityManager->remove($sortie);
-                $entityManager->flush($sortie);
-                return $this->redirectToRoute('sorties');
-            }
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sorties');
         }
         return $this->render('creer_sortie/index.html.twig', [
             'controller_name' => 'CreerSortieController',

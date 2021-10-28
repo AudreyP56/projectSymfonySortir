@@ -1,0 +1,21 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="{{ asset('library/website/css/404.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+
+
+    <div>
+        <aside><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4424790/Mirror.png" alt="404 Image" />
+        </aside>
+        <main>
+            <h1>DESOLE !</h1>
+            <p>
+                vous êtes hors application perdu dans le néant il n'y a rien ici <em>. . . comme votre vie sociale.</em>
+            </p>
+            <a href="{{ path('app_login') }}">Revenez au login </a>
+        </main>
+    </div>
+
+{% endblock %}

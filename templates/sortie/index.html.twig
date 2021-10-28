@@ -75,7 +75,10 @@
     </form>
 </div>
     <div class="card-footer">
-        <h4 class="card-title">Liste des sorties :</h4>
+        <div class="sorties-title">
+            <h4 class="card-title">Liste des sorties :</h4>
+            <a class="btn btn-dark" id="creerSortie" href="{{ url('creer_sortie') }}">créer une sortie</a>
+        </div>
         <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -98,21 +101,25 @@
                 <td>{{ sortie.getLieuId().nom }}</td>
                 <td>{{ sortie.dateHeureSortie|format_datetime() }}</td>
                 <td class="table-sortie">{{ sortie.dateLimite|format_datetime() }}</td>
-                <td class="table-sortie">{{ sortie.nbPlace }}</td>
+                <td class="table-sortie">{{ sortie.participants.count() }}/{{ sortie.nbPlace }}</td>
                 <td class="table-sortie">{{ sortie.getEtat().label }}</td>
-                <td class="table-sortie">bollean if participant</td>
+                <td class="table-sortie">
+                    {% if sortie.isParticipant(user)  %}
+                        <p> INSCRIT</p>
+                    {% endif %}
+                </td>
                 <td class="table-sortie"><a href="{{ path('gestionnaire_profil_affichage',{id:sortie.getOrganisateur().id}) }}">{{ sortie.getOrganisateur().nom }} {{ sortie.getOrganisateur().prenom }}</a></td>
                 <td  {% if sortie.getEtat().label == ('Annulée') %} class="disable" {% endif %}>
                     {% if sortie.isParticipant(user)  %}
-                        <a class="table-sortie" href="{{ path('desister',{id:sortie.id}) }}"> Se désister</a>
-                    {% elseif  sortie.dateLimite > date() %}
-                        <a class="table-sortie" href="{{ path('sinscrire',{id:sortie.id}) }}"> S'inscrire</a>
+                        <a class="table-sortie btn btn-danger mb-1 w-100" href="{{ path('desister',{id:sortie.id}) }}" role="button"> Se désister</a>
+                    {% elseif  sortie.dateLimite > date() and sortie.participants.count() < sortie.nbPlace %}
+                        <a class="table-sortie btn btn-success mb-1 w-100" href="{{ path('sinscrire',{id:sortie.id}) }}" role="button"> S'inscrire</a>
                     {% endif %}
                     {% if sortie.getOrganisateur == user and sortie.getEtat().label == ('En création') %}
-                        <a class="table-sortie" href="{{ path('modifier_sortie',{id: sortie.id} ) }}"> Modifier </a>
-                        <a class="table-sortie" href="{{ path('annulation_sortie', {id:sortie.id}) }}">Annuler</a>
+                        <a class="table-sortie btn btn-warning mb-1 w-100" href="{{ path('modifier_sortie',{id: sortie.id} ) }}" role="button"> Modifier </a>
+                        <a class="table-sortie btn btn-secondary mb-1 w-100" href="{{ path('annulation_sortie', {id:sortie.id}) }}" role="button">Annuler</a>
                     {% else %}
-                        <a href="{{ path('afficher_sortie', {id: sortie.id}) }}"> Afficher </a>
+                        <a href="{{ path('afficher_sortie', {id: sortie.id}) }}"  class="btn-annule btn mb-1 w-100" role="button"> Afficher </a>
                     {% endif %}
                 </td>
             </tr>
@@ -130,7 +137,6 @@
             </tbody>
         </table>
         </div>
-        <a class="btn btn-dark" id="creerSortie" href="{{ url('creer_sortie') }}">créer une sortie</a>
     </div>
 
 </div>

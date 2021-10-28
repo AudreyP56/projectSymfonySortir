@@ -1,29 +1,54 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('library/website/css/breakingNew.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ path('sorties') }}">Sortir</a>
+
+        <a class="navbar-brand" href="{{ path('sorties') }}">  <img  width="100%" height="100" src="{{ asset('./../uploads/logo_long.png') }}"></a>
         <button class="navbar-toggler collapsed navbar-mobile" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <div class="onoffswitch3">
+            <input type="checkbox" name="onoffswitch3" class="onoffswitch3-checkbox" id="myonoffswitch3" checked>
+            <label class="onoffswitch3-label" for="myonoffswitch3">
+        <span class="onoffswitch3-inner">
+            <span class="onoffswitch3-active">
+                <marquee class="scroll-text">DEPECHEZ VOUS AVANT LE PROCHAIN CONFINEMENT <span class="glyphicon glyphicon-forward"></span> OU L'EFFONDREMENT DE LA SOCIETE !  <span class="glyphicon glyphicon-forward"></span> ... ou d'avoir des enfants</marquee>
+                <span class="onoffswitch3-switch">BREAKING NEWS <span class="glyphicon glyphicon-remove"></span></span>
+            </span>
+            <span class="onoffswitch3-inactive"><span class="onoffswitch3-switch">SHOW BREAKING NEWS</span></span>
+        </span>
+            </label>
+        </div>
 
         <div class="collapse navbar-collapse navbar-mobile" id="navbarTogglerDemo03" style>
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link mt-1" href="{{ path('admin') }}">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mt-1" href="{{ path('csv') }}">Ajout CSV</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="">Villes</a>
+                    <a class="nav-link mt-1" href="{{ path('sorties') }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Sites</a>
+                    <a class="nav-link" style="width: min-content;" href="{{ path('gestionnaire_profil') }}" >
+                        {% if(app.user.photo != null) %}
+                            <img class="rounded-circle" width="30" height="30" src="{{ asset('./../uploads/' ~app.user.photo ) }}">
+                        {% else %}
+                            <img class="rounded-circle" width="30" height="30" src="{{ asset('./../uploads/imageDefaut.png') }}" alt="Image par defaut de l'utilisateur">
+                        {% endif %}
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('sorties') }}">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('gestionnaire_profil') }}">Mon profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_logout') }}" tabindex="-1">Se déconnecter</a>
+                    <a class="nav-link mt-1" href="{{ path('app_logout') }}"><i class="fas fa-power-off"></i></a>
                 </li>
             </ul>
         </div>

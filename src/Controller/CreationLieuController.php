@@ -4,11 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Lieu;
 use App\Entity\Ville;
-use Doctrine\ORM\EntityManager;
+use App\Trait\CallApiAdress;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreationLieuController extends AbstractController
 {
+    use CallApiAdress ;
+
     #[Route('/creation/lieu', name: 'creation_lieu')]
     public function index(): Response
     {
@@ -56,8 +56,16 @@ class CreationLieuController extends AbstractController
 
             $lieu->setVille($ville);
 
+            // mise à jour lieu
+            $result= $this->fetchApi( $lieu,$ville);
+            if (!empty($result)){
+                $lieu->setLatitude($result[0]);
+                $lieu->setLongitude($result[1]);
+            }
+
             $entityManager->persist($lieu);
             $entityManager->flush();
+
         }
         else
         {
