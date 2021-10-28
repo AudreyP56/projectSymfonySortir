@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Fontdiner+Swanky&family=Roboto:wght@500&display=swap");
 
 * {
-    box-sizing: 0;
     margin: 0;
     padding: 0;
     cursor: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/4424790/cursors-edge.png"),
@@ -64,7 +63,7 @@ em {
     font-style: italic;
     color: #c5dc50;
 }
-}
+
 button {
     font-family: "Fontdiner Swanky", cursive;
     font-size: 1rem;
