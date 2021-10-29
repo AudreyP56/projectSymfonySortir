@@ -27,10 +27,7 @@ function chargementLieu( lieuparam = null){
 }
 
 function chargementVille(){
-
-    // let idVille = document.getElementById("ville").value;
     let selectVille = document.getElementById("ville");
-
     fetch("http://127.0.0.1:8000/listeville")
         .then(response => response.json())
         .then((villes)=> {
@@ -47,14 +44,3 @@ function chargementVille(){
             }
         })
 }
-// function chargementRue(){
-//     let nomLieu = document.getElementById("lieu").value;
-//     let input = document.getElementById("rue");
-//     fetch("http://127.0.0.1:8000/listeRue/" + nomLieu)
-//         .then(response => response.json())
-//         .then((lieuSelect)=> {
-//             for (const lieu of lieuSelect) {
-//                 input.value = lieu.rue;
-//             }
-//         })
-// }
