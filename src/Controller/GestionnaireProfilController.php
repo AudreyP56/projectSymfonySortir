@@ -25,24 +25,17 @@ class GestionnaireProfilController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        #Appel du répo des Users
+        #Appel aux répository nécessaires
         $repoUser = $entityManager->getRepository(User::class);
+        $repoSite = $entityManager->getRepository(Site::class);
+
 
         #On recupère depuis la base (pour profiter du suivi de Doctrine) l'utilisateur actuel
         $profil = $repoUser->find($this->getUser()->getId());
 
-        #Variable qu'on utilisera pour afficher les listes des sites auquel on veut lié l'utilisateur
-        $tabVille = [];
-
-        #Ensuite, on recup les sites et on les mets dans le bon format
-        $repoSite = $entityManager->getRepository(Site::class);
-
         $tabSiteTemp = $repoSite->findAll();
 
-        foreach($tabSiteTemp as $value)
-        {
-            $tabVille[$value->getNom()] = $value->getId();
-        }
+        $tabVille = $this->remplissageTab($tabSiteTemp);
 
         #Création du formulaire de modification
         $profilForm = $this->createFormBuilder(options:['label' => 'truc', 'attr' => ['enctype' => 'multipart/form-data']])
@@ -293,5 +286,17 @@ class GestionnaireProfilController extends AbstractController
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    private function remplissageTab($tabSiteTemp)
+    {
+        $tabVille = [];
+
+        foreach($tabSiteTemp as $value)
+        {
+            $tabVille[$value->getNom()] = $value->getId();
+        }
+
+        return $tabVille;
     }
 }

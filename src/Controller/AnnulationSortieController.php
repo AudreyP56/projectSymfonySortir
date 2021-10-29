@@ -90,9 +90,6 @@ class AnnulationSortieController extends AbstractController
     {
         foreach($tab as $value)
         {
-            dump($value);
-            dump($role);
-
             if($value == $role)
             {
                 return true;
