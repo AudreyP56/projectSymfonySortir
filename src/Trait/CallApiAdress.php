@@ -35,6 +35,5 @@ trait CallApiAdress
         }
 
         return $result;
-
     }
 }
