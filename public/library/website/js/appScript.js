@@ -90,3 +90,14 @@ function konami() {
         alert("Bah bravo il est joli maintenant le site");
     }
 }
+// function chargementRue(){
+//     let nomLieu = document.getElementById("lieu").value;
+//     let input = document.getElementById("rue");
+//     fetch("http://127.0.0.1:8000/listeRue/" + nomLieu)
+//         .then(response => response.json())
+//         .then((lieuSelect)=> {
+//             for (const lieu of lieuSelect) {
+//                 input.value = lieu.rue;
+//             }
+//         })
+// }

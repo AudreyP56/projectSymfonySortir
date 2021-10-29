@@ -12,8 +12,17 @@ class PasswordChangeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('password', PasswordType::class, ['label' => "Nouveau Password"])
+            ->add('password', PasswordType::class ,['label' => "Nouveau Password"])
             ->add('passwordConfirm', PasswordType::class, ['label' => "Confirmer le nouveau password"])
-            ->add('send', SubmitType::class, ['label' => "le Changement c'est maintenant"]);
+
+            ->add('send', SubmitType::class, ['label' => "le Changement c'est maintenant"])
+        ;
     }
+
+//    public function configureOptions(OptionsResolver $resolver): void
+//    {
+//        $resolver->setDefaults([
+//            'data_class' => FormType::class,
+//        ]);
+//    }
 }
