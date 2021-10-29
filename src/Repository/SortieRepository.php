@@ -60,6 +60,7 @@ class SortieRepository extends ServiceEntityRepository
                     $qb->andWhere('s.organisateur = :val6')
                         ->setParameter('val6', $userId );
                 }
+                //FRANCHEMNT LA JE COMPREND PAS TROP ???
                 if ($key == 'isInscrit') {
                     $qb->andWhere(':val7 MEMBER OF s.participants')
                         ->setParameter('val7',$userId);
@@ -107,4 +108,15 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+    /*
+    public function findOneBySomeField($value): ?Sortie
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
 }
