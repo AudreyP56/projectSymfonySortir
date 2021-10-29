@@ -106,8 +106,8 @@ class GestionnaireProfilController extends AbstractController
 
             $profil->setSite($repoSite->find($data['ville']));
 
-            if(array_count_values($listErrors) > 0)
-            {
+            if(count($listErrors) > 0)
+            {;
                 $entityManager->clear();
                 $this->remplissageAlert($listErrors);
             }
