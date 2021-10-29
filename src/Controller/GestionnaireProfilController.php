@@ -37,6 +37,8 @@ class GestionnaireProfilController extends AbstractController
 
         $tabVille = $this->remplissageTab($tabSiteTemp);
 
+        $listErrors = [];
+
         #Création du formulaire de modification
         $profilForm = $this->createFormBuilder(options:['label' => 'truc', 'attr' => ['enctype' => 'multipart/form-data']])
             ->add('pseudo', TextType::class, ['label' => 'Pseudo : ', 'attr' => ['value' => $profil->getPseudo()]])
@@ -51,8 +53,6 @@ class GestionnaireProfilController extends AbstractController
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('reset', ResetType::class, ['label' => 'Annuler'])
         ->getForm();
-
-
 
         $profilForm->handleRequest($request);
 
@@ -70,17 +70,7 @@ class GestionnaireProfilController extends AbstractController
 
                 $temp = $this->traitementPhotoBeforeUpdate($tmpName, $name, $size);
 
-                if(!$temp['res'])
-                {
-                    return new Response('Il y a eu une erreur lors du traitement de l\'opération');
-                }
-
-                #Ici, on supprime l'ancienne photo du dossier upload
-                if($profil->getPhoto() != null)
-                {
-                    unlink('./uploads/'.$profil->getPhoto());
-                }
-                $profil->setPhoto($temp['fileName']);
+                $this->apresTraitementPhoto($listErrors, $temp, $profil);
             }
 
             $profil->setNom($data['nom']);
@@ -90,7 +80,7 @@ class GestionnaireProfilController extends AbstractController
             #Ici, on vérifie si le pseudo n'a pas déjà été prit
             if(in_array($tabPseudoTemp,$repoUser->getAllPseudo()) && $data['pseudo'] != $profil->getPseudo())
             {
-                return new Response("Ce pseudo est déjà pris");
+                array_push($listErrors, "Ce pseudo est déjà pris");
             }
 
             $profil->setPseudo($data['pseudo']);
@@ -106,17 +96,26 @@ class GestionnaireProfilController extends AbstractController
                 #On check si les deux sont égaux ou pas.
                 if($data['password'] != $data['confirmation'])
                 {
-                    return new Response('Le mot de passe et sa confirmation ne sont pas identiques');
+                    array_push($listErrors, 'Le mot de passe et sa confirmation ne sont pas identiques');
                 }
-
-                $profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
+                else
+                {
+                    $profil->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
+                }
             }
 
             $profil->setSite($repoSite->find($data['ville']));
 
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sorties');
+            if(array_count_values($listErrors) > 0)
+            {
+                $entityManager->clear();
+                $this->remplissageAlert($listErrors);
+            }
+            else
+            {
+                $entityManager->flush();
+                return $this->redirectToRoute('sorties');
+            }
         }
 
         return $this->render('gestionnaire_profil/index.html.twig', [
@@ -298,5 +297,31 @@ class GestionnaireProfilController extends AbstractController
         }
 
         return $tabVille;
+    }
+
+    private function apresTraitementPhoto($listErrors, $temp, $profil)
+    {
+        if(!$temp['res'])
+        {
+            array_push($listErrors, 'Il y a eu une erreur lors du traitement de l\'opération');
+        }
+        else
+        {
+            #Ici, on supprime l'ancienne photo du dossier upload
+            if($profil->getPhoto() != null)
+            {
+                unlink('./uploads/'.$profil->getPhoto());
+            }
+
+            $profil->setPhoto($temp['fileName']);
+        }
+    }
+
+    private function remplissageAlert($listErrors)
+    {
+        foreach($listErrors as $value)
+        {
+            $this->addFlash('danger', $value);
+        }
     }
 }

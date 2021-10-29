@@ -10,6 +10,11 @@
     <h2 class="card-header">Mon profil</h2>
     <div class="car-body">
     {{ form_start(profilForm) }}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="row-test">
             <div class="col">
                 {% if(profil.photo != null) %}
