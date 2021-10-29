@@ -17,7 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,8 +62,6 @@ class CreerSortieController extends AbstractController
         if($creationForm->isSubmitted()){
 
             $data = $creationForm->getData();
-
-            $lieu = $repoLieu->findBy(["nom" => $data["lieu"]]);
 
             if($data["dateLimite"] <= $data["dateHeureSortie"]){
                 if(($data["lieu"] !== "0") && ($data["lieu"] !== "-- Sélectionner un lieu --") ) {
