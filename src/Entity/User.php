@@ -77,6 +77,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $sorties;
 
     /**
+     * @ORM\OneToOne(targetEntity=ResetLink::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $resetLink;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $actif;
@@ -256,17 +262,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->sorties;
     }
 
-    public function addSorty(Sortie $sorty): self
-    {
-        $now = date("F j, Y, g:i a");
-
-        if (!$this->sorties->contains($sorty) and $this->dateLimite > $now) {
-            $this->sorties[] = $sorty;
-            $sorty->addParticipant($this);
-        }
-
-        return $this;
-    }
+//    public function addSorty(Sortie $sorty): self
+//    {
+//        $now = date("F j, Y, g:i a");
+//
+//        if (!$this->sorties->contains($sorty) and $this->dateLimite > $now) {
+//            $this->sorties[] = $sorty;
+//            $sorty->addParticipant($this);
+//        }
+//
+//        return $this;
+//    }
 
     public function removeSorty(Sortie $sorty): self
     {
@@ -285,6 +291,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActif(?bool $actif): self
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getResetLink(): ?ResetLink
+    {
+        return $this->resetLink;
+    }
+
+    public function setResetLink(ResetLink $resetLink): self
+    {
+        if($resetLink->getUser() !== $this)
+        {
+            $resetLink->setUser($this);
+        }
+
+        $this->resetLink = $resetLink;
 
         return $this;
     }
