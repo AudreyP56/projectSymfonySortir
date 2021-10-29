@@ -14,13 +14,6 @@ class ResetPasswordType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, ['label' => 'Votre email'])
-            ->add('send', SubmitType::class,['label' => 'Envoyer demande de reset du password']);
+            ->add('send', SubmitType::class, ['label' => 'Envoyer demande de reset du password']);
     }
-
-//    public function configureOptions(OptionsResolver $resolver): void
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => FormType::class,
-//        ]);
-//    }
 }
