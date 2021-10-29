@@ -92,3 +92,4 @@ function konami() {
         alert("Bah bravo il est joli maintenant le site");
     }
 }
+
