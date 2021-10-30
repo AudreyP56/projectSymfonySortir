@@ -78,7 +78,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=ResetLink::class, mappedBy="user", cascade={"persist", "remove"})
-     * @ORM\Column(type="boolean", nullable=true)
      */
     private $resetLink;
 
